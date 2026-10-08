@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gaia Medica AI 🇪🇨 - Asistente Médico de Emergencias | Creado por Jonny</title>
+    <meta name="description" content="Gaia Medica AI: asistente de emergencia rural para Ecuador con triaje, centros cercanos, guía de primeros auxilios y apoyo médico inteligente. Creado por Jonny.">
+    <meta name="theme-color" content="#0369a1">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Google Fonts for Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body class="theme-emergency">
+    <!-- Main App Container -->
+    <div id="app" class="app-container">
+        
+        <!-- Header Bar -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon brand-logo-wrap">
+                    <img src="assets/logo-medical-assistant.svg" alt="Asistente Médico" class="brand-logo">
+                </div>
+                <div class="brand-text">
+                    <h1>Gaia Medica AI 🇪🇨 <span class="badge-offline" id="connection-status">⚡ ECU 911 OFFLINE</span></h1>
+                    <p class="brand-sub">Asistente inteligente de salud rural • <strong>Desarrollado por Jonny</strong></p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="btn-whistle-toggle" class="btn-icon btn-beacon" title="Silbato y Baliza de Rescate Nocturno ECU 911" aria-label="Baliza de rescate">
+                    📢
+                </button>
+                <button id="btn-theme-toggle" class="btn-icon" title="Cambiar tema (Alto Contraste Sol / Noche)" aria-label="Cambiar tema">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                </button>
+                <button id="btn-audio-toggle" class="btn-icon" title="Activar/Desactivar Asistente de Voz" aria-label="Asistente por voz">
+                    <svg id="icon-audio-on" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Creator Credit Banner -->
+        <div class="creator-badge-bar">
+            <span>👤 Plataforma Médica Ecuatoriana de Emergencias • Diseñada y Creada por <strong>Jonny</strong> para Comunidades Rurales, Sierra y Amazonía</span>
+        </div>
+
+        <!-- Emergency Banner SOS Trigger -->
+        <div class="emergency-banner">
+            <div class="sos-quick-card">
+                <div class="sos-info">
+                    <div class="pulse-indicator"></div>
+                    <div>
+                        <strong class="sos-title">🚨 ¿EMERGENCIA MÉDICA EN ECUADOR?</strong>
+                        <p class="sos-desc">Genera alerta inmediata con GPS satelital para ECU 911 y Subcentros MSP sin datos móviles</p>
+                    </div>
+                </div>
+                <button id="btn-main-sos" class="btn-sos-pulse" type="button" title="Abrir alerta de emergencia" aria-label="Abrir alerta de emergencia ECU 911">
+                    <span>SOS ECU 911</span>
+                    <small>ALERTAR</small>
+                </button>
+            </div>
+        </div>
+
+        <section class="professional-dashboard" aria-label="Panel clínico rápido">
+            <div class="dashboard-header">
+                <div>
+                    <p class="eyebrow">Panel clínico</p>
+                    <h2>Herramientas médicas esenciales</h2>
+                </div>
+                <span class="status-pill">● Modo de atención</span>
+            </div>
+
+            <div class="feature-grid">
+                <article class="feature-card feature-red">
+                    <div class="feature-icon">🚑</div>
+                    <div>
+                        <h3>Triaje rápido</h3>
+                        <p>Evaluación de signos vitales y prioridad de urgencia.</p>
+                    </div>
+                </article>
+
+                <article class="feature-card feature-blue">
+                    <div class="feature-icon">📍</div>
+                    <div>
+                        <h3>Centros cercanos</h3>
+                        <p>Ubicación de subcentros, hospitales y apoyo por GPS.</p>
+                    </div>
+                </article>
+
+                <article class="feature-card feature-green">
+                    <div class="feature-icon">🩺</div>
+                    <div>
+                        <h3>Primeros auxilios</h3>
+                        <p>Guías paso a paso para RCP, heridas y urgencias rurales.</p>
+                    </div>
+                </article>
+
+                <article class="feature-card feature-gold">
+                    <div class="feature-icon">💊</div>
+                    <div>
+                        <h3>Botiquín y plantas</h3>
+                        <p>Recomendaciones básicas para atención inmediata y control.</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs">
+            <button class="nav-btn" data-tab="tab-chat">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                <span>Chat IA Médico</span>
+            </button>
+            <button class="nav-btn" data-tab="tab-objetivos">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2l7 4v6c0 5-3.4 9.7-7 12-3.6-2.3-7-7-7-12V6l7-4z"/>
+                    <path d="M9 12l2 2 4-4"/>
+                </svg>
+                <span>Objetivos</span>
+            </button>
+            <button class="nav-btn active" data-tab="tab-triaje">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+                <span>Triaje AI</span>
+            </button>
+            <button class="nav-btn" data-tab="tab-near">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span>Centros Cercanos GPS</span>
+            </button>
+            <button class="nav-btn" data-tab="tab-auxilio">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                </svg>
+                <span>Primeros Auxilios</span>
+            </button>
+            <button class="nav-btn" data-tab="tab-vademecum">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+                    <path d="m8.5 8.5 7 7"/>
+                </svg>
+                <span>Plantas & Botiquín</span>
+            </button>
+            <button class="nav-btn" data-tab="tab-vitals">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12h4l3 8 4-16 3 8h4"/>
+                </svg>
+                <span>Bitácora Paciente</span>
+            </button>
+            <button class="nav-btn" data-tab="tab-languages">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m5 8 6 6"/>
+                    <path d="m4 14 6-6 2 3"/>
+                    <path d="M2 5h12"/>
+                    <path d="M7 2h1"/>
+                    <path d="m22 22-5-10-5 10"/>
+                    <path d="M14 18h6"/>
+                </svg>
+                <span>Kichwa / Shuar</span>
+            </button>
+            <button class="nav-btn" data-tab="tab-ficha">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect width="18" height="18" x="3" y="3" rx="2"/>
+                    <path d="M7 7h10M7 12h10M7 17h6"/>
+                </svg>
+                <span>Ficha de Emergencia</span>
+            </button>
+            <button class="nav-btn" data-tab="tab-directorio">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <span>ECU 911 / MSP</span>
+            </button>
+        </nav>
+
+        <!-- Dynamic Content Sections -->
+        <main class="main-content">
+
+            <!-- TAB 0: CHAT IA MÉDICO -->
+            <section id="tab-chat" class="tab-page">
+                <div class="card-hero chat-hero">
+                    <div class="card-header-flex">
+                        <div>
+                            <h2>Asistente Médico IA</h2>
+                            <p class="subtitle">Consulta rápida de síntomas, señales de alarma y atención inmediata. Responde con orientación básica de urgencia.</p>
+                        </div>
+                    </div>
+
+                    <section class="chat-memory" aria-label="Aprendizaje local">
+                        <div>
+                            <p class="eyebrow">Memoria privada de este dispositivo</p>
+                            <p id="chat-memory-summary" aria-live="polite">Aún no hay temas aprendidos.</p>
+                            <small>La memoria registra categorías, no aprende medicina nueva. El historial del chat también se guarda aquí; el botón lo borra junto con el aprendizaje.</small>
+                        </div>
+                        <button id="btn-clear-chat-memory" class="btn-secondary btn-sm" type="button">Borrar memoria e historial</button>
+                    </section>
+
+                    <div class="patient-guidance">
+                        <div class="guidance-header">
+                            <p class="eyebrow">Guía rápida para el paciente</p>
+                            <h3>Señales de urgencia y cuidados iniciales</h3>
+                        </div>
+
+                        <div class="guidance-grid">
+                            <article class="guidance-card danger">
+                                <h4>🚨 Emergencia inmediata</h4>
+                                <ul>
+                                    <li>Dolor fuerte en el pecho, falta de aire o desmayo.</li>
+                                    <li>Sangrado abundante, convulsión o pérdida de conciencia.</li>
+                                    <li>Confusión, fiebre alta o dolor intenso no controlado.</li>
+                                </ul>
+                            </article>
+
+                            <article class="guidance-card alert">
+                                <h4>🌡️ Fiebre y deshidratación</h4>
+                                <ul>
+                                    <li>Si hay fiebre alta, vómitos repetidos o diarrea, ofrece líquidos.</li>
+                                    <li>Busca ayuda si hay boca seca, sed intensa, debilidad o poco orina.</li>
+                                    <li>Niños, adultos mayores y enfermos deben observarse más de cerca.</li>
+                                </ul>
+                            </article>
+
+                            <article class="guidance-card info">
+                                <h4>🩺 Cuándo consultar</h4>
+                                <ul>
+                                    <li>Dolor abdominal fuerte con vómitos persistentes.</li>
+                                    <li>Fiebre con dificultad respiratoria o dolor al respirar.</li>
+                                    <li>Picadura de serpiente, alergia con hinchazón o mareo.</li>
+                                </ul>
+                            </article>
+
+                            <article class="guidance-card success">
+                                <h4>🤰 Embarazo y riesgo</h4>
+                                <ul>
+                                    <li>Dolor fuerte, sangrado vaginal, mareo o convulsión requieren atención urgente.</li>
+                                    <li>Si hay contracciones regulares con dolor severo, acude de inmediato.</li>
+                                    <li>La vigilancia temprana afecta la seguridad de la madre y del bebé.</li>
+                                </ul>
+                            </article>
+                        </div>
+                    </div>
+
+                    <div class="chat-quick-actions">
+                        <button class="chat-quick-pill" data-prompt="Dolor en el pecho">💔 Dolor en el pecho</button>
+                        <button class="chat-quick-pill" data-prompt="Fiebre y vómitos">🌡️ Fiebre y vómitos</button>
+                        <button class="chat-quick-pill" data-prompt="Dificultad para respirar">🫁 Dificultad respiratoria</button>
+                        <button class="chat-quick-pill" data-prompt="Herida con sangrado">🩸 Herida con sangrado</button>
+                        <button class="chat-quick-pill" data-prompt="Deshidratación por diarrea">💧 Deshidratación</button>
+                        <button class="chat-quick-pill" data-prompt="Alergia con hinchazón">🤧 Alergia y hinchazón</button>
+                    </div>
+
+                    <div id="medical-chat-window" class="medical-chat-window" aria-live="polite"></div>
+
+                    <div class="chat-input-row">
+                        <textarea id="medical-chat-input" rows="3" placeholder="Describe el síntoma o la situación del paciente..."></textarea>
+                        <button id="btn-medical-chat-send" class="btn-primary">Enviar</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tab-objetivos" class="tab-page">
+                <div class="institutional-section">
+                    <div class="institutional-header">
+                        <div>
+                            <p class="eyebrow">Propuesta de impacto</p>
+                            <h2>Solución para salud pública y atención rural</h2>
+                        </div>
+                        <span class="status-pill status-policy">● Enfoque institucional</span>
+                    </div>
+
+                    <div class="institutional-grid">
+                        <article class="institutional-card">
+                            <div class="feature-icon">🎯</div>
+                            <h3>Objetivo público</h3>
+                            <p>Reducir tiempos de respuesta, mejorar la atención inicial y apoyar a comunidades rurales con acceso limitado a servicios médicos.</p>
+                        </article>
+
+                        <article class="institutional-card">
+                            <div class="feature-icon">📡</div>
+                            <h3>Funciona sin conexión</h3>
+                            <p>La plataforma está diseñada para operar en zonas con baja cobertura, permitiendo continuidad en emergencias y evaluación rápida.</p>
+                        </article>
+
+                        <article class="institutional-card">
+                            <div class="feature-icon">🧭</div>
+                            <h3>Apoyo a la toma de decisiones</h3>
+                            <p>Permite triaje, localización de centros de salud, apoyo por voz y guía de primeros auxilios para decisiones más oportunas.</p>
+                        </article>
+
+                        <article class="institutional-card">
+                            <div class="feature-icon">🤝</div>
+                            <h3>Valor institucional</h3>
+                            <p>Puede apoyar a personal de salud, operativos de emergencia, comunidades y programas de atención primaria en áreas remotas.</p>
+                        </article>
+                    </div>
+
+                    <div class="institutional-quote">
+                        <strong>Propuesta clave:</strong> Gaia Medica AI busca fortalecer la atención temprana en Ecuador mediante tecnología útil, accesible y orientada a la salud pública, especialmente en zonas rurales, de difícil acceso y con baja infraestructura médica.
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 1: TRIAJE DE EMERGENCIA -->
+            <section id="tab-triaje" class="tab-page active">
+                <div class="triage-guide-note" role="note">
+                    <strong>Guía de orientación, no diagnóstico.</strong>
+                    <span>Si la persona no respira, está inconsciente, tiene sangrado abundante o empeora rápidamente, llama al ECU 911 y no esperes a terminar las preguntas.</span>
+                </div>
+                <div class="card-hero">
+                    <div class="card-header-flex">
+                        <div>
+                            <h2>Guía paso a paso de salud</h2>
+                            <p class="subtitle">Responde quién necesita ayuda, revisa señales de alarma y selecciona el síntoma principal.</p>
+                        </div>
+                        <button id="btn-speech-input" class="btn-voice-input" title="Evaluar por voz">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/>
+                            </svg>
+                            <span>Hablar síntomas</span>
+                        </button>
+                    </div>
+
+                    <!-- Voice Status Indicator -->
+                    <div id="voice-status-bar" class="voice-status hidden">
+                        <span class="recording-pulse"></span>
+                        <span id="voice-status-text">Escuchando síntomas... habla con claridad</span>
+                    </div>
+
+                    <!-- Interactive Wizard Container -->
+                    <div id="triage-wizard" class="wizard-box">
+                        <div class="wizard-step" id="triage-step-container">
+                            <!-- Dynamic Content Injected via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Triage Results Output (Hidden by default) -->
+                <div id="triage-result" class="triage-result-card hidden">
+                    <!-- Dynamic Result Card Injected via JS -->
+                </div>
+            </section>
+
+            <!-- TAB 2: CENTROS DE SALUD CERCANOS A LA UBICACIÓN DEL PACIENTE -->
+            <section id="tab-near" class="tab-page">
+                <div class="section-title-box">
+                    <h2>Subcentros de Salud MSP y Puestos Cercanos</h2>
+                    <p>Calcula la distancia exacta en kilómetros desde la ubicación GPS actual del paciente hacia el centro médico ecuatoriano más cercano.</p>
+                </div>
+
+                <div class="card-hero">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3>Localizador GPS de Evacuación Médica en Ecuador</h3>
+                            <p class="subtitle">Calcula distancia en Km, rumbo de brújula y estimación de tiempo de viaje (a pie, vehículo o canoa).</p>
+                        </div>
+                        <button id="btn-calc-gps-near" class="btn-primary">
+                            📍 Actualizar mi Ubicación GPS
+                        </button>
+                    </div>
+
+                    <div id="gps-patient-status-bar" class="gps-status-box" style="margin-bottom:20px;">
+                        <span id="patient-coords-text">Presiona el botón para calcular tu distancia a los Subcentros MSP de Ecuador.</span>
+                    </div>
+
+                    <div id="nearest-centers-grid" class="contacts-grid">
+                        <!-- Injected via directory.js -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: PRIMEROS AUXILIOS INTERACTIVOS -->
+            <section id="tab-auxilio" class="tab-page">
+                <div class="section-title-box">
+                    <h2>Guías de Primeros Auxilios de Emergencia</h2>
+                    <p>Instrucciones visuales y habladas offline para salvaguardar vidas en zonas rurales.</p>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="filter-chips">
+                    <button class="chip active" data-filter="all">Todos</button>
+                    <button class="chip" data-filter="vital">Soporte Vital (RCP)</button>
+                    <button class="chip" data-filter="trauma">Picaduras de Serpientes ECU</button>
+                    <button class="chip" data-filter="parto">Parto Rural</button>
+                    <button class="chip" data-filter="lesion">Hemorragias & Fracturas</button>
+                </div>
+
+                <!-- Interactive RCP Metronome Component -->
+                <div class="rcp-metronome-card">
+                    <div class="metronome-header">
+                        <div class="metronome-badge">⚡ ASISTENTE RCP EN VIVO</div>
+                        <h3>Reanimación Cardiopulmonar (RCP Adulto/Niño)</h3>
+                        <p>Ritmo oficial: <strong>100 - 120 compresiones por minuto</strong>. Sigue los pitidos sonoros.</p>
+                    </div>
+
+                    <div class="metronome-controls">
+                        <div class="bpm-display">
+                            <span id="bpm-val">110</span>
+                            <small>BPM (Ritmo)</small>
+                        </div>
+                        <div class="metronome-visual">
+                            <div id="metronome-beat-circle" class="beat-circle">
+                                <span>PUSH</span>
+                            </div>
+                        </div>
+                        <div class="metronome-actions">
+                            <button id="btn-start-metronome" class="btn-primary btn-lg">
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                </svg>
+                                <span>INICIAR RITMO RCP</span>
+                            </button>
+                            <button id="btn-speech-rcp" class="btn-secondary">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                                </svg>
+                                <span>Narrar Guía de Voz</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Snake & Wound Cam Assisting -->
+                <div class="snake-id-card">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3>Guía Visual de Serpientes Venenosas del Ecuador</h3>
+                            <p class="subtitle">Identificación de la Equis (<em>Bothrops asper</em>), Jergón, Verrugosa (<em>Lachesis muta</em>) y Coral (<em>Micrurus</em>).</p>
+                        </div>
+                        <button id="btn-open-wound-cam" class="btn-secondary">
+                            📸 Tomar Foto Herida/Serpiente
+                        </button>
+                    </div>
+
+                    <div class="snake-compare-grid">
+                        <div class="snake-box danger">
+                            <span class="snake-badge">🐍 VENENOSA: EQUIS / JERGÓN / VERRUGOSA</span>
+                            <ul>
+                                <li><strong>Cabeza:</strong> Triangular muy marcada. Fosa loreal termo-receptora entre ojo y nariz.</li>
+                                <li><strong>Colmillos:</strong> Móviles y huecos con veneno hemotóxico/citotóxico.</li>
+                                <li><strong>Acción inmediata:</strong> Reposo total. Transporte directo a Subcentro MSP para suero antiofídico poliofídico del Ecuador.</li>
+                            </ul>
+                        </div>
+                        <div class="snake-box safe">
+                            <span class="snake-badge-safe">🐍 NO VENENOSA (Falsa Coral / Culebra Verde)</span>
+                            <ul>
+                                <li><strong>Cabeza:</strong> Redonda, continua con el cuello.</li>
+                                <li><strong>Ojos:</strong> Pupilas circulares sin fosa loreal.</li>
+                                <li><strong>Acción inmediata:</strong> Lavar con agua y jabón, desinfectar y vigilar infección.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- First Aid Guides Grid -->
+                <div class="guides-grid" id="guides-grid-container">
+                    <!-- Injected via firstaid.js -->
+                </div>
+            </section>
+
+            <!-- TAB 4: VADEMÉCUM RURAL & MEDICINA TRADICIONAL ECUATORIANA -->
+            <section id="tab-vademecum" class="tab-page">
+                <div class="section-title-box">
+                    <h2>Vademécum & Plantas Medicinales del Ecuador 🇪🇨</h2>
+                    <p>Fármacos de botiquín rural MSP y catálogo de plantas autóctonas (*Guayusa, Horchata Lojana, Sangre de Drago, Escancel, Mña*).</p>
+                </div>
+
+                <!-- Search Bar & Calculator -->
+                <div class="search-dosage-wrapper">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" id="vademecum-search" placeholder="Buscar medicamento o planta ecuatoriana (ej. Paracetamol, Guayusa, Horchata)...">
+                    </div>
+                    <button id="btn-open-dosage-calc" class="btn-secondary">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="4" y="2" width="16" height="20" rx="2"/>
+                            <line x1="8" y1="6" x2="16" y2="6"/>
+                            <line x1="16" y1="14" x2="16" y2="18"/>
+                        </svg>
+                        <span>Calculadora Dosis Niños</span>
+                    </button>
+                </div>
+
+                <!-- Dosage Calculator Modal/Card (Hidden initially) -->
+                <div id="dosage-calc-card" class="dosage-card hidden">
+                    <div class="card-header-flex">
+                        <h4>Calculadora Pediatría Rural (Dosis por Peso)</h4>
+                        <button id="btn-close-dosage" class="btn-close">&times;</button>
+                    </div>
+                    <div class="dosage-form">
+                        <div class="form-group">
+                            <label for="child-weight">Peso del Niño (Kg):</label>
+                            <input type="number" id="child-weight" placeholder="Ej. 12" min="3" max="50">
+                        </div>
+                        <div class="form-group">
+                            <label for="med-select">Medicamento Botiquín MSP:</label>
+                            <select id="med-select">
+                                <option value="paracetamol">Paracetamol Jarabe (120mg/5ml)</option>
+                                <option value="ibuprofeno">Ibuprofeno Jarabe (100mg/5ml)</option>
+                                <option value="sro">Sales de Rehidratación Oral (SRO)</option>
+                                <option value="amoxicilina">Amoxicilina Jarabe (250mg/5ml)</option>
+                            </select>
+                        </div>
+                        <button id="btn-calc-dose" class="btn-primary">Calcular Dosis</button>
+                    </div>
+                    <div id="dosage-result" class="dosage-result-box hidden"></div>
+                </div>
+
+                <!-- Tabs for Medicines vs Herbal Support -->
+                <div class="subtabs-bar">
+                    <button class="subtab-btn active" data-subtab="meds-essential">Botiquín MSP Ecuador</button>
+                    <button class="subtab-btn" data-subtab="meds-traditional">Plantas Autóctonas Ecuatorianas</button>
+                </div>
+
+                <!-- Medicines Container -->
+                <div id="vademecum-list" class="vademecum-grid">
+                    <!-- Injected via vademecum.js -->
+                </div>
+            </section>
+
+            <!-- TAB 5: BITÁCORA DE SIGNOS VITALES DEL PACIENTE -->
+            <section id="tab-vitals" class="tab-page">
+                <div class="section-title-box">
+                    <h2>Bitácora de Control de Signos Vitales</h2>
+                    <p>Registra la evolución del paciente para entregar a los paramédicos del ECU 911 o al Subcentro de Salud.</p>
+                </div>
+
+                <div class="vitals-layout">
+                    <div class="vitals-form-card">
+                        <h3>Añadir Nueva Lectura de Control</h3>
+                        <form id="vitals-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="vital-temp">Temperatura (°C):</label>
+                                    <input type="number" id="vital-temp" step="0.1" placeholder="Ej. 38.5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="vital-pulse">Pulso (BPM - Lat/min):</label>
+                                    <input type="number" id="vital-pulse" placeholder="Ej. 92">
+                                </div>
+                                <div class="form-group">
+                                    <label for="vital-bp">Presión Arterial (Sistólica/Diastólica):</label>
+                                    <input type="text" id="vital-bp" placeholder="Ej. 120/80">
+                                </div>
+                                <div class="form-group">
+                                    <label for="vital-resp">Frecuencia Respiratoria (resp/min):</label>
+                                    <input type="number" id="vital-resp" placeholder="Ej. 20">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="vital-notes">Observación / Medicamento administrado:</label>
+                                    <input type="text" id="vital-notes" placeholder="Ej. Se le dio Paracetamol, sudando frío">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary btn-block">Registrar Control en Bitácora</button>
+                        </form>
+                    </div>
+
+                    <div class="vitals-history-card">
+                        <div class="card-header-flex">
+                            <h3>Historial Registrado del Paciente</h3>
+                            <button id="btn-clear-vitals" class="btn-secondary btn-sm">Limpiar</button>
+                        </div>
+                        <div id="vitals-history-table" class="vitals-list">
+                            <!-- Injected via vitals.js -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 6: TRADUCTOR KICHWA Y LENGUAS ORIGINARIAS DE ECUADOR -->
+            <section id="tab-languages" class="tab-page">
+                <div class="section-title-box">
+                    <h2>Frases Médicas Interculturales del Ecuador 🇪🇨</h2>
+                    <p>Comunicación clínica en **Kichwa Ecuatoriano (Runa Shimi)**, **Shuar Chicham** y **Waorani** con voz hablada.</p>
+                </div>
+
+                <div class="language-selector-bar">
+                    <button class="chip active" data-lang="kichwa">Kichwa (Sierra & Amazonía)</button>
+                    <button class="chip" data-lang="shuar">Shuar Chicham</button>
+                    <button class="chip" data-lang="waorani">Waorani (Wao Tededo)</button>
+                </div>
+
+                <div class="phrases-grid" id="phrases-grid-container">
+                    <!-- Injected via languages.js -->
+                </div>
+            </section>
+
+            <!-- TAB 7: FICHA DE EMERGENCIA DE PRUEBA -->
+            <section id="tab-ficha" class="tab-page">
+                <div class="section-title-box">
+                    <h2>Ficha de emergencia • Versión de prueba</h2>
+                    <p>Completa los datos que quieras compartir con el personal de salud. Se guardan solo en este dispositivo; esta prueba no envía datos ni genera un QR escaneable.</p>
+                </div>
+
+                <div class="profile-layout">
+                    <!-- Profile Form -->
+                    <div class="profile-card">
+                        <h3>Información importante para emergencias</h3>
+                        <form id="profile-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="prof-fullname">Nombre Completo:</label>
+                                    <input type="text" id="prof-fullname" placeholder="Nombres y Apellidos">
+                                </div>
+                                <div class="form-group">
+                                    <label for="prof-dni">Cédula de Identidad Ecuatoriana / Pasaporte:</label>
+                                    <input type="text" id="prof-dni" placeholder="Ej. 1712345678">
+                                </div>
+                                <div class="form-group">
+                                    <label for="prof-blood">Grupo Sanguíneo:</label>
+                                    <select id="prof-blood">
+                                        <option value="Desconocido">Desconocido</option>
+                                        <option value="O+">O Positivo (O+)</option>
+                                        <option value="O-">O Negativo (O-)</option>
+                                        <option value="A+">A Positivo (A+)</option>
+                                        <option value="A-">A Negativo (A-)</option>
+                                        <option value="B+">B Positivo (B+)</option>
+                                        <option value="B-">B Negativo (B-)</option>
+                                        <option value="AB+">AB Positivo (AB+)</option>
+                                        <option value="AB-">AB Negativo (AB-)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="prof-age">Edad / Provincia / Cantón:</label>
+                                    <input type="text" id="prof-age" placeholder="Ej. 35 años • Pichincha, Quito">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="prof-allergies">Alergias Conocidas (Penicilina, etc.):</label>
+                                    <input type="text" id="prof-allergies" placeholder="Ej. Alérgico a Penicilina y AINEs">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="prof-conditions">Enfermedades Crónicas / Diagnóstico:</label>
+                                    <input type="text" id="prof-conditions" placeholder="Ej. Hipertensión, Asma, Embarazo 26 sem">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="prof-medications">Medicamentos que usa actualmente:</label>
+                                    <input type="text" id="prof-medications" placeholder="Nombre y horario, si lo conoce">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="prof-contact">Contacto de Emergencia / Cabildo / Teniente:</label>
+                                    <input type="text" id="prof-contact" placeholder="Nombre y Celular del Familiar o Presidente Comunal">
+                                </div>
+                            </div>
+                            <label class="profile-consent">
+                                <input id="profile-consent" type="checkbox" required>
+                                <span>Confirmo que es mi información o tengo autorización para ingresarla. Entiendo que se guarda en este dispositivo.</span>
+                            </label>
+                            <button type="submit" class="btn-primary btn-block">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                                    <polyline points="17 21 17 13 7 13 7 21"/>
+                                    <polyline points="7 3 7 8 15 8"/>
+                                </svg>
+                                <span>Guardar ficha en este dispositivo</span>
+                            </button>
+                            <button id="btn-clear-profile" class="btn-secondary btn-block" type="button">Borrar ficha guardada</button>
+                            <p id="profile-status" class="profile-status" role="status" aria-live="polite"></p>
+                        </form>
+                    </div>
+
+                    <!-- Emergency card preview -->
+                    <div class="qr-preview-card">
+                        <div id="emergency-card-preview" class="emergency-card-preview">
+                            <span class="badge-creator">PROTOTIPO</span>
+                            <h3>Ficha de emergencia</h3>
+                            <p class="small-desc">Vista previa para imprimir o guardar como PDF. No sustituye una historia clínica ni confirma diagnósticos.</p>
+                            <div id="emergency-card-details" class="emergency-card-details">
+                                <p>Ingresa los datos y guarda la ficha para ver aquí la vista previa.</p>
+                            </div>
+                        </div>
+                        <button id="btn-print-card" class="btn-secondary btn-block">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 6 2 18 2 18 9"/>
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                                <rect x="6" y="14" width="12" height="8"/>
+                            </svg>
+                            <span>Imprimir / Guardar como PDF</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 8: DIRECTORIO DE ECUADOR (ECU 911 / MSP 171) -->
+            <section id="tab-directorio" class="tab-page">
+                <div class="section-title-box">
+                    <h2>Directorio Oficial del Ecuador (ECU 911 / MSP 171)</h2>
+                    <p>Contactos nacionales y regionales de emergencia del Ecuador y frecuencias comunitarias de radio VHF/HF.</p>
+                </div>
+
+                <div class="directory-actions">
+                    <button id="btn-add-contact" class="btn-primary">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        <span>Agregar Contacto de mi Parroquia</span>
+                    </button>
+                </div>
+
+                <!-- Directory Grid -->
+                <div class="contacts-grid" id="contacts-grid-container">
+                    <!-- Injected via directory.js -->
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer Bar with Jonny Signature -->
+        <footer class="app-footer">
+            <p><strong>MediRural ECU 🇪🇨</strong> • Plataforma Médica de Salud Rural Ecuatoriana</p>
+            <p style="color:var(--color-info); font-weight:700; margin-top:4px;">Diseñada y Desarrollada por Jonny • Integración ECU 911 / MSP Ecuador</p>
+        </footer>
+
+        <!-- SOS MODAL POPUP -->
+        <div id="sos-modal" class="modal-overlay hidden">
+            <div class="modal-content modal-danger">
+                <div class="modal-header">
+                    <div class="danger-badge">🚨 ALERTA SOS ECU 911 ECUADOR</div>
+                    <button id="btn-close-sos" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="gps-status-box" id="gps-status-box">
+                        <div class="spinner"></div>
+                        <span id="gps-status-text">Obteniendo Coordenadas GPS satelitales en Ecuador...</span>
+                    </div>
+
+                    <div class="sos-payload-preview">
+                        <label>Mensaje SOS Automatizado ECU 911 (Listo para enviar):</label>
+                        <textarea id="sos-text-payload" readonly rows="4"></textarea>
+                    </div>
+
+                    <div class="sos-channels">
+                        <h4>Selecciona Canal de Envío en Ecuador:</h4>
+                        <div class="channel-buttons">
+                            <button id="btn-send-sms" class="btn-channel btn-sms">
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                </svg>
+                                <div>
+                                    <strong>Enviar SMS a Emergencias 911 (Sin Datos)</strong>
+                                    <small>Funciona con cualquier celular 2G en Ecuador</small>
+                                </div>
+                            </button>
+                            <button id="btn-send-whatsapp" class="btn-channel btn-wa">
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                                </svg>
+                                <div>
+                                    <strong>Enviar por WhatsApp al Subcentro MSP</strong>
+                                    <small>Para grupos de emergencia parroquial</small>
+                                </div>
+                            </button>
+                            <button id="btn-call-emergency" class="btn-channel btn-call">
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                                <div>
+                                    <strong>Llamar a ECU 911 / MSP 171</strong>
+                                    <small>Llamada gratuita nacional en Ecuador</small>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CAMERA / WOUND MODAL POPUP -->
+        <div id="camera-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Captura de Foto para Diagnóstico Médico</h3>
+                    <button id="btn-close-camera" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="camera-preview-box">
+                        <video id="camera-video" autoplay playsinline style="width:100%; border-radius:var(--radius-md); background:#000; height:240px; object-fit:cover;"></video>
+                        <canvas id="camera-canvas" class="hidden"></canvas>
+                    </div>
+                    <div style="display:flex; gap:10px; margin-top:14px;">
+                        <button id="btn-take-photo" class="btn-primary btn-block">📸 Tomar Fotografía Herida</button>
+                    </div>
+                    <div id="photo-preview-container" class="hidden" style="margin-top:14px; text-align:center;">
+                        <img id="photo-img-element" style="max-width:100%; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">Foto guardada localmente para mostrar al médico de evacuación.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESCUE BEACON MODAL POPUP -->
+        <div id="beacon-modal" class="modal-overlay hidden">
+            <div class="modal-content modal-danger" style="text-align:center;">
+                <div class="modal-header">
+                    <div class="danger-badge">🚨 BALIZA DE RESCATE & SILBATO SONORO</div>
+                    <button id="btn-close-beacon" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p style="margin-bottom:20px;">Emite un pitido de alta frecuencia a 3000 Hz y destellos de pantalla estroboscópicos para ser localizado de noche en la selva o cerro ecuatoriano.</p>
+                    
+                    <div id="beacon-strobe-box" class="strobe-box">
+                        <span>RESCUE BEACON ECU 911</span>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
+                        <button id="btn-toggle-whistle-sound" class="btn-sos-pulse btn-block btn-lg">
+                            <span>📢 ACTIVAR SILBATO Y LUZ</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW CONTACT MODAL -->
+        <div id="contact-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Agregar Contacto de Salud Rural (Ecuador)</h3>
+                    <button id="btn-close-contact-modal" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-contact-form">
+                        <div class="form-group">
+                            <label for="contact-name">Nombre / Subcentro MSP:</label>
+                            <input type="text" id="contact-name" placeholder="Ej. Subcentro de Salud Tipo A - El Chaco" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-phone">Teléfono / Celular:</label>
+                            <input type="text" id="contact-phone" placeholder="Ej. 0987654321" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-radio">Frecuencia de Radio (Opcional):</label>
+                            <input type="text" id="contact-radio" placeholder="Ej. VHF 145.500 MHz / Canal 4">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-role">Tipo de Agente en Ecuador:</label>
+                            <select id="contact-role">
+                                <option value="Subcentro de Salud MSP Tipo A/B/C">Subcentro de Salud MSP Tipo A/B/C</option>
+                                <option value="Ambulancia ECU 911 / Fluvial">Ambulancia ECU 911 / Fluvial Amazonía</option>
+                                <option value="Promotor de Salud Rural / Partera">Promotor de Salud Rural / Partera</option>
+                                <option value="Teniente Político / Cabildo Comunitario">Teniente Político / Cabildo Comunitario</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary btn-block">Guardar Contacto Ecuatoriano</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audio Player Element for Speech Synthesis fallback -->
+        <div id="tts-indicator" class="tts-toast hidden">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+            <span id="tts-toast-text">Narrando instrucciones...</span>
+            <button id="btn-stop-tts" class="btn-sm">Detener</button>
+        </div>
+
+    </div>
+
+    <!-- Application Scripts -->
+    <script src="js/qr-generator.js"></script>
+    <script src="js/triage.js"></script>
+    <script src="js/firstaid.js"></script>
+    <script src="js/vademecum.js"></script>
+    <script src="js/vitals.js"></script>
+    <script src="js/languages.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/directory.js"></script>
+    <script src="js/sos.js"></script>
+    <script src="js/beacon.js"></script>
+    <script src="js/medical-chat.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

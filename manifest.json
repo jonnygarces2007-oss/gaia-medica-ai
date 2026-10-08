@@ -1,0 +1,18 @@
+{
+  "name": "MediRural AI - Asistente Médico de Emergencias",
+  "short_name": "MediRural",
+  "description": "Asistente médico de emergencia offline para zonas rurales con triaje por voz, auxilio paso a paso, metrónomo RCP y botón SOS.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b0f19",
+  "theme_color": "#b91c1c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ef4444'><path d='M12 2v20M2 12h20'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
