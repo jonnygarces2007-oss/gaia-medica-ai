@@ -1,6 +1,12 @@
 (function(window) {
-    const STORAGE_KEY = 'medirural_medical_chat_history';
-    const MEMORY_KEY = 'gaia_medica_chat_learning';
+    const STORAGE_KEY = 'medirural_medical_chat_session';
+    const LEGACY_STORAGE_KEY = 'medirural_medical_chat_history';
+    const MEMORY_KEY = 'gaia_medica_chat_learning_session';
+    const LEGACY_MEMORY_KEY = 'gaia_medica_chat_learning';
+    let geminiAvailable = false;
+    let geminiStatusChecked = false;
+    let isSending = false;
+    let inMemoryHistory = [];
     const topicPatterns = [
         { name: 'Respiración', pattern: /respir|ahogo|asfixia|falta.*aire/ },
         { name: 'Corazón y pecho', pattern: /pecho|corazon|opresion|angina/ },
@@ -28,6 +34,7 @@
         bindMemoryControls();
         renderMemory();
         renderHistory();
+        checkGeminiStatus();
     }
 
     function bindMemoryControls() {
@@ -36,10 +43,13 @@
 
         clearButton.addEventListener('click', () => {
             try {
-                localStorage.removeItem(MEMORY_KEY);
-                localStorage.removeItem(STORAGE_KEY);
+                sessionStorage.removeItem(MEMORY_KEY);
+                sessionStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem(LEGACY_MEMORY_KEY);
+                localStorage.removeItem(LEGACY_STORAGE_KEY);
             } catch (error) {
             }
+            inMemoryHistory = [];
             renderMemory();
             renderHistory();
         });
@@ -98,28 +108,117 @@
         chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 
-    function sendMessage() {
+    async function sendMessage() {
         const input = document.getElementById('medical-chat-input');
         const chatWindow = document.getElementById('medical-chat-window');
-        if (!input || !chatWindow) return;
+        const button = document.getElementById('btn-medical-chat-send');
+        if (!input || !chatWindow || !button || isSending) return;
 
         const text = input.value.trim();
         if (!text) return;
+        const consent = document.getElementById('gemini-sharing-consent')?.checked === true;
+        const containsSensitiveIdentifiers = hasSensitiveIdentifiers(text);
+
+        isSending = true;
+        input.disabled = true;
+        button.disabled = true;
+        button.textContent = 'Consultando...';
 
         const history = loadHistory();
         history.push({ role: 'user', text });
         learnFromMessage(text);
+        saveHistory(history);
+        input.value = '';
+        renderHistory();
 
-        const assistantReply = generateMedicalReply(text);
+        const responseStatus = document.getElementById('chat-response-status');
+        if (responseStatus) {
+            responseStatus.textContent = geminiAvailable && consent && !containsSensitiveIdentifiers
+                ? 'Se enviará solo esta pregunta a Gemini...'
+                : 'Respuesta local; no se compartirá esta pregunta con Google.';
+        }
+
+        let assistantReply;
+        try {
+            if (!geminiStatusChecked) await checkGeminiStatus();
+            if (geminiAvailable && consent && containsSensitiveIdentifiers) {
+                setGeminiStatus('No envié la consulta: parece contener un correo, teléfono o documento. Elimina esos datos y vuelve a intentarlo.', true);
+                assistantReply = `${generateMedicalReply(text)}\n\nPor privacidad, no envié este mensaje a Gemini. Quita nombres, cédulas, teléfonos y direcciones antes de activar el envío.`;
+            } else if (geminiAvailable && consent) {
+                assistantReply = await requestGemini(text);
+            } else {
+                assistantReply = generateMedicalReply(text);
+                if (geminiAvailable) {
+                    assistantReply += '\n\nGemini no recibió este mensaje porque el permiso de envío está desactivado.';
+                }
+            }
+        } catch (error) {
+            geminiAvailable = false;
+            setGeminiStatus('Gemini no respondió; se usará la orientación local.', false);
+            assistantReply = `${generateMedicalReply(text)}\n\nNo se pudo consultar Gemini; esta respuesta es orientación local básica.`;
+        } finally {
+            isSending = false;
+            input.disabled = false;
+            button.disabled = false;
+            button.textContent = 'Enviar';
+            if (responseStatus) responseStatus.textContent = '';
+        }
+
         history.push({ role: 'assistant', text: assistantReply });
         saveHistory(history);
-
-        input.value = '';
         renderHistory();
 
         if (window.MediRuralApp && typeof window.MediRuralApp.speak === 'function') {
             window.MediRuralApp.speak(assistantReply.substring(0, 180));
         }
+    }
+
+    async function checkGeminiStatus() {
+        try {
+            const response = await fetch('/api/health', { cache: 'no-store' });
+            if (!response.ok) throw new Error('Servidor no disponible');
+            const status = await response.json();
+            geminiAvailable = Boolean(status.configured);
+            setGeminiStatus(
+                geminiAvailable
+                    ? 'Gemini conectado. Las respuestas pueden tardar unos segundos.'
+                    : 'Gemini no tiene una clave configurada; se usarán respuestas locales.',
+                geminiAvailable
+            );
+        } catch (error) {
+            geminiAvailable = false;
+            setGeminiStatus('Servidor Gemini no disponible; respuestas locales activas.', false);
+        } finally {
+            geminiStatusChecked = true;
+        }
+    }
+
+    function setGeminiStatus(message, connected) {
+        const status = document.getElementById('gemini-status');
+        if (!status) return;
+        status.textContent = message;
+        status.classList.toggle('is-connected', connected);
+        status.classList.toggle('is-local', !connected);
+    }
+
+    function hasSensitiveIdentifiers(text) {
+        const normalizedPhone = text.replace(/[\s()-]/g, '');
+        return /[\w.+-]+@[\w.-]+\.[A-Z]{2,}/i.test(text)
+            || /\d{10,}/.test(normalizedPhone)
+            || /(?:\+?593)?09\d{8}\b/.test(normalizedPhone);
+    }
+
+    async function requestGemini(text) {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messages: [{ role: 'user', text }] })
+        });
+        const result = await response.json();
+        if (!response.ok || typeof result.reply !== 'string') {
+            throw new Error(result.error || 'Gemini no pudo responder.');
+        }
+        return result.reply;
     }
 
     function learnFromMessage(message) {
@@ -132,7 +231,7 @@
         memory.total = (memory.total || 0) + 1;
 
         try {
-            localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
+            sessionStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
         } catch (error) {
             return;
         }
@@ -141,7 +240,14 @@
 
     function loadMemory() {
         try {
-            const saved = localStorage.getItem(MEMORY_KEY);
+            let saved = sessionStorage.getItem(MEMORY_KEY);
+            if (!saved) {
+                saved = localStorage.getItem(LEGACY_MEMORY_KEY);
+                if (saved) {
+                    sessionStorage.setItem(MEMORY_KEY, saved);
+                    localStorage.removeItem(LEGACY_MEMORY_KEY);
+                }
+            }
             if (!saved) return { total: 0, topics: {} };
             const parsed = JSON.parse(saved);
             return {
@@ -168,7 +274,31 @@
     }
 
     function generateMedicalReply(input) {
-        const text = input.toLowerCase();
+        const text = input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+        if (/^(hola|buenas(?: tardes| noches)?|buenos dias)\b/.test(text)) {
+            return 'Hola. Cuéntame qué le ocurre a la persona y desde cuándo. Si tiene dificultad para respirar, dolor en el pecho, convulsiones, pérdida del conocimiento o sangrado abundante, llama al ECU 911 ahora.';
+        }
+
+        if (/^(gracias|muchas gracias)\b/.test(text)) {
+            return 'De nada. Si los síntomas empeoran o aparece una señal de alarma, busca atención urgente. ¿Hay algo más sobre esta situación que quieras consultar?';
+        }
+
+        if (/(medicamento|medicina|pastilla|dosis|antibiotico|que puedo tomar|que debo tomar|que le puedo dar)/.test(text)) {
+            return 'No puedo recomendar un medicamento ni una dosis por chat. Depende de la edad, alergias, embarazo, enfermedades y otros medicamentos. Consulta a un profesional de salud o farmacéutico; no uses medicamentos de otra persona. Si hay dificultad para respirar, dolor en el pecho, pérdida del conocimiento o sangrado abundante, llama al ECU 911.';
+        }
+
+        if (/(que puede ser|que tengo|cual es la causa|causa de|diagnostico|diagnosticar|es grave)/.test(text)) {
+            return 'No puedo confirmar una causa ni dar un diagnóstico por chat. Para orientarte mejor, dime qué síntoma presenta, en qué parte, desde cuándo, qué tan intenso es y si hay otros síntomas. Si tiene dificultad para respirar, dolor en el pecho, confusión, convulsiones o empeora rápidamente, llama al ECU 911.';
+        }
+
+        if (/(cuando.*(ir|acudir|consultar)|debo.*(ir|acudir)|necesito.*(urgencia|hospital)|es.*(emergencia|urgencia)|llamar.*(911|emergencia))/.test(text)) {
+            return 'Llama al ECU 911 o busca atención urgente ante dificultad para respirar, dolor en el pecho, pérdida del conocimiento, convulsiones, sangrado abundante o hinchazón de cara o garganta. Si no hay esas señales pero el problema persiste, empeora o te preocupa, contacta a un centro de salud.';
+        }
+
+        if (/(que datos|que informacion|que necesitas|que debo decir|como te explico|como describo)/.test(text)) {
+            return 'Para orientarte, dime sin incluir nombres ni datos de identidad: edad aproximada, síntoma principal, cuándo comenzó, si está empeorando y si respira y responde normalmente. Añade temperatura u otros signos medidos, alergias, embarazo o medicamentos solo si son relevantes.';
+        }
 
         if (/(dolor.*pecho|opresion.*pecho|pecho.*aprieta|angina)/.test(text)) {
             return 'Dolor en el pecho puede ser una emergencia. Si hay sudor frío, náusea, debilidad o falta de aire, busca atención urgente de inmediato y llama a ECU 911 o al centro de salud más cercano. Si la persona está incómoda, siéntala y no la dejes sola.';
@@ -219,17 +349,30 @@
 
     function loadHistory() {
         try {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (!saved) return [];
+            let saved = sessionStorage.getItem(STORAGE_KEY);
+            if (!saved) {
+                saved = localStorage.getItem(LEGACY_STORAGE_KEY);
+                if (saved) {
+                    sessionStorage.setItem(STORAGE_KEY, saved);
+                    localStorage.removeItem(LEGACY_STORAGE_KEY);
+                }
+            }
+            if (!saved) return inMemoryHistory;
             const parsed = JSON.parse(saved);
-            return Array.isArray(parsed) ? parsed : [];
+            inMemoryHistory = Array.isArray(parsed) ? parsed.slice(-20) : [];
+            return inMemoryHistory;
         } catch (error) {
-            return [];
+            return inMemoryHistory;
         }
     }
 
     function saveHistory(history) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(-20)));
+        inMemoryHistory = history.slice(-20);
+        try {
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(inMemoryHistory));
+        } catch (error) {
+            return;
+        }
     }
 
     function escapeHtml(value) {

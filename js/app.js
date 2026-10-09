@@ -6,6 +6,7 @@
 (function(window) {
     let currentSpeech = null;
     let isVoiceNarratorEnabled = true;
+    let speechRequestId = 0;
 
     document.addEventListener('DOMContentLoaded', () => {
         initApp();
@@ -18,6 +19,7 @@
         setupThemeToggle();
         setupVoiceToggle();
         setupOfflineMonitor();
+        setupPrivacyControls();
         registerServiceWorker();
 
         // Initialize submodules
@@ -31,11 +33,26 @@
         if (window.MediRuralDirectory) window.MediRuralDirectory.initDirectory();
         if (window.MediRuralSOS) window.MediRuralSOS.initSOS();
         if (window.MediRuralBeacon) window.MediRuralBeacon.initBeacon();
+
+        announceWelcome();
+    }
+
+    function announceWelcome() {
+        try {
+            if (sessionStorage.getItem('gaia_welcome_announced')) return;
+            sessionStorage.setItem('gaia_welcome_announced', 'true');
+        } catch (error) {
+            return;
+        }
+
+        window.setTimeout(() => {
+            speak('Bienvenido a Gaia Medica, orientación de salud para Ecuador. Si es una emergencia, llama al ECU 911. Esta información no sustituye a un profesional de salud.');
+        }, 900);
     }
 
     /* Tab Navigation */
     function setupNavigation() {
-        const navBtns = document.querySelectorAll('.nav-btn');
+        const navBtns = document.querySelectorAll('[data-tab]');
         const tabPages = document.querySelectorAll('.tab-page');
 
         navBtns.forEach(btn => {
@@ -108,7 +125,7 @@
         }
     }
 
-    function speak(text) {
+    async function speak(text) {
         if (!isVoiceNarratorEnabled) return;
         if (!('speechSynthesis' in window)) {
             console.warn("Sintetizador de voz no disponible");
@@ -116,6 +133,9 @@
         }
 
         stopSpeech();
+        const requestId = speechRequestId;
+        const voices = await loadVoices();
+        if (!isVoiceNarratorEnabled || requestId !== speechRequestId) return;
 
         const toast = document.getElementById('tts-indicator');
         const toastText = document.getElementById('tts-toast-text');
@@ -126,7 +146,14 @@
         }
 
         currentSpeech = new SpeechSynthesisUtterance(text);
-        currentSpeech.lang = 'es-ES';
+        const spanishVoices = voices
+            .filter((voice) => voice.lang.toLowerCase().startsWith('es'));
+        const maleSpanishVoice = spanishVoices.find((voice) =>
+            /\b(pablo|jorge|diego|juan|carlos|miguel|antonio|raul|luis|javier|roberto|male|masculine|hombre)\b/i.test(voice.name)
+        );
+        const selectedVoice = maleSpanishVoice || spanishVoices.find((voice) => voice.default);
+        currentSpeech.lang = selectedVoice ? selectedVoice.lang : 'es-ES';
+        if (selectedVoice) currentSpeech.voice = selectedVoice;
         currentSpeech.rate = 0.95; // Slightly slower for clarity in rural environments
 
         currentSpeech.onend = () => {
@@ -140,7 +167,33 @@
         window.speechSynthesis.speak(currentSpeech);
     }
 
+    function loadVoices() {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length) return Promise.resolve(voices);
+
+        return new Promise((resolve) => {
+            let settled = false;
+            const finish = (availableVoices) => {
+                if (settled) return;
+                settled = true;
+                window.clearTimeout(timeoutId);
+                window.speechSynthesis.removeEventListener('voiceschanged', onVoicesChanged);
+                resolve(availableVoices);
+            };
+            const onVoicesChanged = () => {
+                const availableVoices = window.speechSynthesis.getVoices();
+                if (availableVoices.length) finish(availableVoices);
+            };
+            const timeoutId = window.setTimeout(() => {
+                finish(window.speechSynthesis.getVoices());
+            }, 1000);
+
+            window.speechSynthesis.addEventListener('voiceschanged', onVoicesChanged);
+        });
+    }
+
     function stopSpeech() {
+        speechRequestId += 1;
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
         }
@@ -150,6 +203,39 @@
 
     function isVoiceEnabled() {
         return isVoiceNarratorEnabled;
+    }
+
+    function setupPrivacyControls() {
+        const clearButton = document.getElementById('btn-clear-local-health-data');
+        const status = document.getElementById('local-health-data-status');
+        if (!clearButton) return;
+
+        clearButton.addEventListener('click', () => {
+            const confirmed = window.confirm('Se borrarán de este navegador la ficha, signos vitales, historial del chat y contactos guardados. Esta acción no se puede deshacer. ¿Continuar?');
+            if (!confirmed) return;
+
+            const localKeys = [
+                'medirural_patient_profile',
+                'medirural_vitals_log',
+                'medirural_medical_chat_history',
+                'gaia_medica_chat_learning',
+                'medirural_ecuador_contacts'
+            ];
+            const sessionKeys = [
+                'medirural_medical_chat_session',
+                'gaia_medica_chat_learning_session'
+            ];
+
+            try {
+                localKeys.forEach((key) => localStorage.removeItem(key));
+                sessionKeys.forEach((key) => sessionStorage.removeItem(key));
+                if (status) status.textContent = 'Datos locales de salud borrados. Actualizando la página...';
+                clearButton.disabled = true;
+                window.setTimeout(() => window.location.reload(), 700);
+            } catch (error) {
+                if (status) status.textContent = 'No se pudieron borrar todos los datos. Revisa los permisos del navegador.';
+            }
+        });
     }
 
     /* Offline Status Indicator */

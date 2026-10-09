@@ -3,11 +3,13 @@
  * Caches all emergency assets locally for instant loading without mobile signal.
  */
 
-const CACHE_NAME = 'medirural-v1.1.0';
+const CACHE_NAME = 'medirural-v1.3.5';
 const ASSETS = [
     './',
     './index.html',
     './css/styles.css',
+    './assets/logo-medical-assistant.svg',
+    './js/medical-chat.js',
     './js/qr-generator.js',
     './js/triage.js',
     './js/firstaid.js',
@@ -24,9 +26,16 @@ const ASSETS = [
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
+        caches.open(CACHE_NAME).then(async (cache) => {
             console.log('[SW] Pre-caching MediRural Emergency assets...');
-            return cache.addAll(ASSETS);
+            await Promise.all(ASSETS.map(async (asset) => {
+                const cacheUrl = new URL(asset, self.registration.scope);
+                const fetchUrl = new URL(cacheUrl);
+                fetchUrl.searchParams.set('__sw_version', CACHE_NAME);
+                const response = await fetch(new Request(fetchUrl, { cache: 'reload' }));
+                if (!response.ok) throw new Error(`No se pudo precargar ${asset}`);
+                await cache.put(cacheUrl.href, response);
+            }));
         })
     );
     self.skipWaiting();
@@ -49,17 +58,24 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
-            if (cachedResponse) {
-                return cachedResponse;
+    const requestUrl = new URL(event.request.url);
+    if (event.request.method !== 'GET' || requestUrl.origin !== self.location.origin) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
+
+    event.respondWith((async () => {
+        const cache = await caches.open(CACHE_NAME);
+        const cachedResponse = await cache.match(event.request);
+        if (cachedResponse) return cachedResponse;
+
+        try {
+            return await fetch(event.request);
+        } catch (error) {
+            if ((event.request.headers.get('accept') || '').includes('text/html')) {
+                return cache.match(new URL('./index.html', self.registration.scope).href);
             }
-            return fetch(event.request).catch(() => {
-                // If offline and requesting page, return index.html
-                if (event.request.headers.get('accept').includes('text/html')) {
-                    return caches.match('./index.html');
-                }
-            });
-        })
-    );
+            return Response.error();
+        }
+    })());
 });

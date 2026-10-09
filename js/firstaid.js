@@ -11,94 +11,137 @@
 
     const firstAidData = [
         {
-            id: 'rcp_guide',
-            category: 'vital',
-            title: 'Reanimación Cardiopulmonar (RCP)',
+            id: 'rcp_guide', category: 'vital', title: 'RCP en adulto',
             icon: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>',
-            desc: 'Para pacientes inconscientes que NO respiran o no tienen pulso.',
+            desc: 'Para una persona adulta inconsciente que no respira normalmente. No pierdas tiempo buscando el pulso.',
+            emergency: 'Llama al ECU 911, activa el altavoz y pide un DEA si hay uno disponible.',
             steps: [
-                '1. Coloca al paciente boca arriba en una superficie dura e inmoviliza la cabeza.',
-                '2. Entrelaza tus manos y colócalas en el centro del pecho (mitad inferior del esternón).',
-                '3. Comprime el tórax 5 a 6 cm de profundidad manteniendo los brazos rectos.',
-                '4. Realiza 30 compresiones seguidas al ritmo de 100-120 por minuto (usa el metrónomo arriba).',
-                '5. Da 2 insuflaciones (boca a boca) si tienes mascarilla o tela limpia. Si no, haz compresiones continuas.'
+                'Comprueba que el lugar sea seguro, háblale en voz alta y pide ayuda.',
+                'Abre la vía aérea con cuidado y observa la respiración por no más de 10 segundos. Jadeos aislados no son respiración normal.',
+                'Pon el talón de una mano en el centro del pecho y la otra encima. Con brazos rectos, comprime fuerte y rápido: 100 a 120 por minuto, dejando que el pecho vuelva a subir.',
+                'Si no tienes entrenamiento o no puedes dar ventilaciones, continúa solo con compresiones. Si estás entrenado, alterna 30 compresiones y 2 ventilaciones.',
+                'Sigue las instrucciones del ECU 911 hasta que llegue ayuda, respire normalmente o no puedas continuar.'
             ],
-            audioGuide: 'Guia de RCP. Coloca el talon de tu mano en el centro del pecho del paciente. Mantén tus brazos firmes y rectos. Realiza compresiones continuas siguiendo el ritmo del sonido. Presiona con fuerza sin detenerte hasta que llegue el personal de salud.'
+            audioGuide: 'RCP en adulto. Si no responde y no respira normalmente, llama al ECU 911 en altavoz. Coloca las manos en el centro del pecho y comprime fuerte y rápido, de cien a ciento veinte veces por minuto. Sigue las instrucciones del operador.',
+            sourceUrl: 'https://www.sja.org.uk/first-aid-advice/cpr/'
         },
         {
-            id: 'heimlich_guide',
-            category: 'vital',
-            title: 'Atragantamiento (Maniobra de Heimlich)',
+            id: 'heimlich_guide', category: 'vital', title: 'Atragantamiento en adulto o niño mayor de 1 año',
             icon: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>',
-            desc: 'Si la persona no puede hablar, toser ni respirar debido a un objeto atrapado.',
+            desc: 'Actúa si no puede hablar, respirar o toser eficazmente. En lactantes, llama al ECU 911 y sigue sus instrucciones.',
+            emergency: 'Pide a alguien que llame al ECU 911 mientras ayudas.',
             steps: [
-                '1. Colócate de pie detrás de la persona y rodea su cintura con tus brazos.',
-                '2. Haz un puño con una mano y colócalo justo por encima del ombligo y debajo del esternón.',
-                '3. Agarra tu puño con la otra mano y presiona hacia ADENTRO y hacia ARRIBA con fuerza rápida.',
-                '4. Repite las presiones fuertemente hasta que el objeto sea expulsado o la persona tosas.',
-                '5. En embarazadas o personas obesas, presiona en el centro del pecho (esternón).'
+                'Si puede toser o hablar, anímale a toser y observa; no hagas maniobras mientras la tos sea eficaz.',
+                'Si no puede, inclínale hacia delante y da hasta 5 golpes firmes entre los omóplatos.',
+                'Si no se libera, realiza hasta 5 compresiones abdominales hacia dentro y arriba. Revisa después de cada intento si el objeto salió.',
+                'Alterna 5 golpes en la espalda y 5 compresiones hasta que respire, llegue ayuda o quede inconsciente.',
+                'Si queda inconsciente, bájale al suelo con cuidado, llama al ECU 911 e inicia RCP siguiendo al operador. Retira solo objetos claramente visibles; no introduzcas los dedos a ciegas.'
             ],
-            audioGuide: 'Maniobra de Heimlich. Colocate detras del paciente. Pon tu puño sobre su ombligo y abraza fuerte empujando hacia adentro y arriba de forma rapida. Repite con fuerza hasta que expulse la obstruccion.'
+            audioGuide: 'Atragantamiento grave. Pide que llamen al ECU 911. Inclina a la persona hacia delante y da hasta cinco golpes entre los omóplatos. Si no funciona, realiza hasta cinco compresiones abdominales. Alterna y sigue las instrucciones del operador.',
+            sourceUrl: 'https://www.sja.org.uk/first-aid-advice/choking/'
         },
         {
-            id: 'snake_guide',
-            category: 'trauma',
-            title: 'Picadura de Víbora / Serpiente Venenosa',
+            id: 'snake_guide', category: 'trauma', title: 'Mordedura de serpiente',
             icon: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>',
-            desc: 'Protocolo de urgencia en selva y sierra rural para envenenamiento oídico.',
+            desc: 'Toda mordedura requiere evaluación urgente. No intentes reconocer la especie ni acercarte para fotografiarla.',
+            emergency: 'Llama al ECU 911 y solicita traslado urgente a un centro de salud.',
             steps: [
-                '1. MANTÉN A LA VÍCTIMA EN REPOSO ABSOLUTO. Quítale anillos, pulseras o calzado ajustado.',
-                '2. NO cortes la piel, NO chupes el veneno con la boca, NO apliques hielo ni torniquete ajustado.',
-                '3. Lava la mordedura con agua limpia y jabón neutro sin frotar con fuerza.',
-                '4. Inmoviliza el brazo o pierna mordida con una tablilla manteniendo el miembro más bajo que el corazón.',
-                '5. Transporta al paciente echado en camilla o hamaca hacia la posta médica para suero antiofídico.'
+                'Aléjate de la serpiente. No intentes capturarla ni matarla.',
+                'Mantén a la persona quieta y tranquila; limita el movimiento de la extremidad sin apretar.',
+                'Retira anillos, reloj o prendas apretadas antes de que aparezca hinchazón.',
+                'No cortes, succiones, exprimas ni apliques hielo, sustancias o torniquetes. No retrases el traslado.',
+                'Sigue las instrucciones del ECU 911 y del personal sanitario.'
             ],
-            audioGuide: 'Atencion por picadura de serpiente. Mantén al paciente completamente quieto y acostado. No intentes chupar el veneno ni cortar la piel. Lava la herida con agua y transporta de inmediato al puesto de salud para colocarle suero antiofídico.'
+            audioGuide: 'Mordedura de serpiente. Aléjate del animal y llama al ECU 911. Mantén a la persona quieta, retira objetos apretados y no cortes, succiones ni pongas torniquetes. Sigue las instrucciones del operador.'
         },
         {
-            id: 'bleeding_guide',
-            category: 'lesion',
-            title: 'Control de Hemorragias y Torniquete',
+            id: 'bleeding_guide', category: 'lesion', title: 'Hemorragia grave',
             icon: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7Z"/></svg>',
-            desc: 'Detención de sangrados profusos y amputaciones de trauma.',
+            desc: 'Sangrado abundante, continuo o que empapa rápidamente la ropa puede ser una emergencia.',
+            emergency: 'Llama al ECU 911 de inmediato; usa el altavoz si estás solo.',
             steps: [
-                '1. Presiona fuertemente sobre la herida sangrante usando una gasa estéril o tela limpia.',
-                '2. Mantén la presión firme sin levantar la tela por al menos 10 a 15 minutos continuos.',
-                '3. Si la tela se empapa, coloca otra tela encima SIN retirar la primera.',
-                '4. Si el sangrado es masivo en extremidad y no cesa, coloca un torniquete 5-7 cm sobre la herida.',
-                '5. Ajusta el torniquete hasta que el sangrado rojo brillante se detenga y anota la hora exacta.'
+                'Si hay guantes, póntelos. Presiona directamente la herida con una gasa o tela limpia.',
+                'Mantén presión firme y continua. Si hay un objeto incrustado, no lo retires ni presiones encima; presiona alrededor.',
+                'Pide a otra persona que llame al ECU 911. No levantes la tela para revisar; si se empapa, añade otra encima.',
+                'Mantén a la persona abrigada y quieta, y vigila su respuesta y respiración.',
+                'Usa un torniquete solo si dispones de uno adecuado y sabes aplicarlo, o si el operador del ECU 911 te guía.'
             ],
-            audioGuide: 'Control de hemorragia. Presiona fuerte la herida con tela limpia durante 10 minutos sin soltar. Si el sangrado es abundante en brazo o pierna, aplica torniquete 5 centimetros arriba de la herida y anota la hora.'
+            audioGuide: 'Hemorragia grave. Llama al ECU 911. Presiona directamente la herida con una tela limpia y mantén presión continua. No retires objetos incrustados. Sigue las instrucciones del operador.',
+            sourceUrl: 'https://www.sja.org.uk/first-aid-advice/severe-bleeding/'
         },
         {
-            id: 'birth_guide',
-            category: 'parto',
-            title: 'Atención de Parto Inminente Rural',
+            id: 'birth_guide', category: 'parto', title: 'Parto inminente mientras llega ayuda',
             icon: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Z"/></svg>',
-            desc: 'Guía de asistencia cuando el bebé nace fuera del hospital en la comunidad.',
+            desc: 'Si el nacimiento parece inminente, prioriza ayuda profesional y sigue la orientación del ECU 911.',
+            emergency: 'Llama al ECU 911. No dejes sola a la madre.',
             steps: [
-                '1. Prepara un espacio limpio, seco y cálido. Lava tus manos minuciosamente con agua y jabón.',
-                '2. Cuando asome la cabeza del bebé, sostiene con suavidad sin jalar ni tirar del cuello.',
-                '3. Una vez fuera el bebé, límpiale la boca y nariz con un paño limpio y colócalo sobre el pecho de la madre (contacto piel a piel).',
-                '4. Abriga inmediatamente al recién nacido para evitar que sufra enfriamiento o hipotermia.',
-                '5. Amarra el cordón umbilical en 2 puntos firmes con hilo desinfectado a 4 dedos del ombligo del bebé y corta entre los nudos con tijera hervida.'
+                'Llama al ECU 911 y sigue al operador. Prepara un lugar limpio, seco y abrigado.',
+                'Ayuda a la madre a estar en una posición cómoda y conserva su privacidad.',
+                'Si el bebé nace antes de que llegue ayuda, sosténlo con cuidado; no tires de él ni del cordón umbilical.',
+                'Sécalo y mantenlo abrigado piel con piel sobre el pecho de la madre, si ambos están estables.',
+                'No cortes ni tires del cordón y no intentes retirar la placenta. Vigila el sangrado y la respiración mientras llega el personal sanitario.'
             ],
-            audioGuide: 'Atencion de parto rural. Mantén las manos muy limpias y un ambiente abrigado. Al nacer el bebe, secale la carita y colocalo de inmediato sobre el pecho de su mama. Abrégalos bien a ambos.'
+            audioGuide: 'Parto inminente. Llama al ECU 911 y sigue al operador. Si el bebé nace antes de la ayuda, sécalo y mantenlo abrigado piel con piel. No tires ni cortes el cordón y no intentes retirar la placenta.'
         },
         {
-            id: 'fracture_guide',
-            category: 'lesion',
-            title: 'Inmovilización de Fracturas y Traumas',
+            id: 'fracture_guide', category: 'lesion', title: 'Sospecha de fractura',
             icon: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v1"/></svg>',
-            desc: 'Técnica de ferulizado improvisado en el campo con madera o caña.',
+            desc: 'Dolor intenso, deformidad, herida sobre el hueso o pérdida de sensibilidad requiere evaluación.',
+            emergency: 'Llama al ECU 911 ante hueso expuesto, lesión de cabeza, cuello, espalda o cadera, o pérdida de sensibilidad.',
             steps: [
-                '1. NO intentes mover ni estirar el hueso que parece roto o torcido.',
-                '2. Busca 2 tablillas de madera, cañas de bambú o ramas rectas más largas que la zona lesionada.',
-                '3. Acolcha las maderas con tela o ropa para no lastimar la piel.',
-                '4. Amarra firmemente con tiras de tela por arriba y por debajo de la articulación sin apretar demasiado.',
-                '5. Comprueba que los dedos del pie o mano mantengan temperatura y sensibilidad normal.'
+                'No intentes enderezar, mover ni recolocar la parte lesionada. Pide ayuda.',
+                'Mantén la extremidad quieta en la posición encontrada y apóyala con cuidado, sin apretar.',
+                'Si hay una herida, cúbrela con una tela limpia. Presiona alrededor, no sobre un hueso expuesto.',
+                'Retira anillos o elementos apretados si puede hacerse sin mover la lesión.',
+                'Vigila dolor, color, temperatura y sensibilidad mientras contactas a un servicio de salud.'
             ],
-            audioGuide: 'Guia de inmovilizacion. No trates de enderezar el hueso roto. Coloca tablillas de madera a los lados y amárralas suavemente con paños limpios para evitar que el hueso se mueva.'
+            audioGuide: 'Sospecha de fractura. No endereces ni muevas la zona. Manténla apoyada como está y llama al ECU 911 si hay hueso expuesto, lesión de espalda o pérdida de sensibilidad.',
+            sourceUrl: 'https://www.sja.org.uk/first-aid-advice/fractures-and-broken-bones/'
+        },
+        {
+            id: 'burns_guide', category: 'other', title: 'Quemadura o escaldadura',
+            icon: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7Z"/></svg>',
+            desc: 'Enfría la zona y busca ayuda si la lesión es extensa, profunda o afecta la cara o la respiración.',
+            emergency: 'Llama al ECU 911 si es extensa o profunda, afecta cara o vía aérea, o fue química o eléctrica.',
+            steps: [
+                'Asegura el lugar y detén el contacto con la fuente sin exponerte.',
+                'Enfría la quemadura con agua corriente fresca durante 20 minutos si está disponible.',
+                'Retira joyas o prendas cercanas antes de que aparezca hinchazón; no retires nada pegado a la piel.',
+                'No uses hielo, pasta, aceites ni cremas; no rompas ampollas.',
+                'Cúbrela sin apretar con material limpio y solicita valoración sanitaria.'
+            ],
+            audioGuide: 'Quemadura. Enfría la zona con agua corriente fresca durante veinte minutos. No uses hielo, aceites ni cremas, y no retires ropa pegada. Llama al ECU 911 si es extensa, profunda o afecta la respiración.',
+            sourceUrl: 'https://www.sja.org.uk/first-aid-advice/burns-and-scalds/'
+        },
+        {
+            id: 'seizure_guide', category: 'other', title: 'Convulsión',
+            icon: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="m13 2 1 6 5-2-2 6 5 1"/></svg>',
+            desc: 'Protege a la persona de golpes y mide cuánto dura la convulsión.',
+            emergency: 'Llama al ECU 911 si dura 5 minutos o más, se repite, es la primera, hay lesión o no recupera la respiración normal.',
+            steps: [
+                'Retira objetos peligrosos alrededor y protege la cabeza con algo blando.',
+                'Afloja la ropa del cuello y mide el tiempo. No sujetes a la persona ni intentes detener los movimientos.',
+                'No introduzcas nada en la boca y no le des agua, comida ni medicamentos durante la convulsión.',
+                'Cuando terminen los movimientos, comprueba si respira normalmente. Si respira, colócala de lado y vigílala.',
+                'Si no respira normalmente, llama al ECU 911 e inicia RCP si sabes hacerlo, siguiendo al operador.'
+            ],
+            audioGuide: 'Convulsión. Aleja objetos y protege la cabeza. No sujetes a la persona ni pongas nada en su boca. Mide cuánto dura. Al terminar, revisa si respira y sigue las instrucciones del ECU 911.',
+            sourceUrl: 'https://www.sja.org.uk/first-aid-advice/seizure/'
+        },
+        {
+            id: 'chest_pain_guide', category: 'vital', title: 'Dolor fuerte en el pecho',
+            icon: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg>',
+            desc: 'Dolor opresivo en el pecho, falta de aire, sudor frío o desmayo puede ser una emergencia.',
+            emergency: 'Llama al ECU 911 ahora. No conduzcas a la persona por cuenta propia.',
+            steps: [
+                'Ayuda a la persona a detener la actividad y descansar en una posición cómoda.',
+                'Llama al ECU 911 y describe los síntomas y la ubicación; sigue al operador.',
+                'Afloja ropa ajustada y mantén a la persona acompañada y abrigada.',
+                'No le des comida, bebida ni medicamentos ajenos. Solo ayuda con su propio tratamiento previamente indicado.',
+                'Vigila respiración y respuesta. Si queda inconsciente y no respira normalmente, inicia RCP guiada por el operador.'
+            ],
+            audioGuide: 'Dolor fuerte en el pecho. Llama al ECU 911 ahora. Ayuda a la persona a descansar, no la dejes sola y no le des medicamentos ajenos. Sigue las instrucciones del operador.',
+            sourceUrl: 'https://www.sja.org.uk/first-aid-advice/heart-attack/'
         }
     ];
 
@@ -116,37 +159,50 @@
             ? firstAidData 
             : firstAidData.filter(g => g.category === filter);
 
-        let html = '';
-        filtered.forEach(guide => {
-            html += `
-                <div class="guide-card">
-                    <div>
-                        <div class="guide-icon-header">
-                            <div class="guide-icon">${guide.icon}</div>
-                            <span class="chip" style="font-size:0.7rem; pointer-events:none;">${guide.category.toUpperCase()}</span>
-                        </div>
-                        <h3>${guide.title}</h3>
-                        <p>${guide.desc}</p>
-                        <ol style="margin-left: 18px; font-size: 0.85rem; color: var(--text-main); margin-bottom: 16px;">
-            `;
-            guide.steps.forEach(st => {
-                html += `<li style="margin-bottom:6px;">${st}</li>`;
-            });
-            html += `
-                        </ol>
-                    </div>
-                    <button class="btn-secondary btn-block" onclick="MediRuralApp.speak('${guide.audioGuide.replace(/'/g, "\\'")}')">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-                        </svg>
-                        <span>Escuchar Guía de Voz</span>
-                    </button>
-                </div>
-            `;
-        });
+        const categoryLabels = {
+            vital: 'Soporte vital',
+            trauma: 'Mordeduras',
+            lesion: 'Lesiones',
+            parto: 'Parto',
+            other: 'Otras urgencias'
+        };
 
-        container.innerHTML = html;
+        container.innerHTML = filtered.map((guide) => `
+            <article class="guide-card">
+                <div class="guide-icon-header">
+                    <div class="guide-icon">${guide.icon}</div>
+                    <span class="guide-category-label">${categoryLabels[guide.category] || 'Primeros auxilios'}</span>
+                </div>
+                <h3>${escapeHtml(guide.title)}</h3>
+                <p class="guide-description">${escapeHtml(guide.desc)}</p>
+                <div class="guide-emergency-callout"><strong>Escalamiento:</strong> ${escapeHtml(guide.emergency)}</div>
+                <ol class="guide-steps">${guide.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join('')}</ol>
+                ${guide.sourceUrl ? `<a class="guide-source" href="${guide.sourceUrl}" target="_blank" rel="noopener noreferrer">Referencia clínica: St John Ambulance</a>` : '<p class="guide-source">Guía general. Confirma indicaciones con ECU 911 o MSP Ecuador.</p>'}
+                <button class="btn-secondary btn-block guide-audio-button" type="button" data-guide-id="${guide.id}" aria-label="Escuchar guía: ${escapeHtml(guide.title)}">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    </svg>
+                    <span>Escuchar guía</span>
+                </button>
+            </article>
+        `).join('');
+
+        container.querySelectorAll('.guide-audio-button').forEach((button) => {
+            button.addEventListener('click', () => {
+                const guide = firstAidData.find((item) => item.id === button.dataset.guideId);
+                if (guide && window.MediRuralApp) window.MediRuralApp.speak(guide.audioGuide);
+            });
+        });
+    }
+
+    function escapeHtml(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
     }
 
     function setupFilterChips() {

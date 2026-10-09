@@ -6,6 +6,7 @@
     <title>Gaia Medica AI 🇪🇨 - Asistente Médico de Emergencias | Creado por Jonny</title>
     <meta name="description" content="Gaia Medica AI: asistente de emergencia rural para Ecuador con triaje, centros cercanos, guía de primeros auxilios y apoyo médico inteligente. Creado por Jonny.">
     <meta name="theme-color" content="#0369a1">
+    <link rel="icon" type="image/svg+xml" href="assets/logo-medical-assistant.svg">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/styles.css">
     <!-- Google Fonts for Modern Typography -->
@@ -21,11 +22,11 @@
         <header class="app-header">
             <div class="brand">
                 <div class="brand-icon brand-logo-wrap">
-                    <img src="assets/logo-medical-assistant.svg" alt="Asistente Médico" class="brand-logo">
+                    <img src="assets/logo-medical-assistant.svg" alt="Robot asistente médico de Gaia Medica" class="brand-logo">
                 </div>
                 <div class="brand-text">
-                    <h1>Gaia Medica AI 🇪🇨 <span class="badge-offline" id="connection-status">⚡ ECU 911 OFFLINE</span></h1>
-                    <p class="brand-sub">Asistente inteligente de salud rural • <strong>Desarrollado por Jonny</strong></p>
+                    <h1>Gaia Medica <span class="brand-ai">AI · ECUADOR</span></h1>
+                    <p class="brand-sub">Orientación y servicios de salud para comunidades rurales • <strong>Desarrollado por Jonny</strong></p>
                 </div>
             </div>
             <div class="header-actions">
@@ -47,11 +48,6 @@
             </div>
         </header>
 
-        <!-- Creator Credit Banner -->
-        <div class="creator-badge-bar">
-            <span>👤 Plataforma Médica Ecuatoriana de Emergencias • Diseñada y Creada por <strong>Jonny</strong> para Comunidades Rurales, Sierra y Amazonía</span>
-        </div>
-
         <!-- Emergency Banner SOS Trigger -->
         <div class="emergency-banner">
             <div class="sos-quick-card">
@@ -69,52 +65,14 @@
             </div>
         </div>
 
-        <section class="professional-dashboard" aria-label="Panel clínico rápido">
-            <div class="dashboard-header">
-                <div>
-                    <p class="eyebrow">Panel clínico</p>
-                    <h2>Herramientas médicas esenciales</h2>
-                </div>
-                <span class="status-pill">● Modo de atención</span>
-            </div>
-
-            <div class="feature-grid">
-                <article class="feature-card feature-red">
-                    <div class="feature-icon">🚑</div>
-                    <div>
-                        <h3>Triaje rápido</h3>
-                        <p>Evaluación de signos vitales y prioridad de urgencia.</p>
-                    </div>
-                </article>
-
-                <article class="feature-card feature-blue">
-                    <div class="feature-icon">📍</div>
-                    <div>
-                        <h3>Centros cercanos</h3>
-                        <p>Ubicación de subcentros, hospitales y apoyo por GPS.</p>
-                    </div>
-                </article>
-
-                <article class="feature-card feature-green">
-                    <div class="feature-icon">🩺</div>
-                    <div>
-                        <h3>Primeros auxilios</h3>
-                        <p>Guías paso a paso para RCP, heridas y urgencias rurales.</p>
-                    </div>
-                </article>
-
-                <article class="feature-card feature-gold">
-                    <div class="feature-icon">💊</div>
-                    <div>
-                        <h3>Botiquín y plantas</h3>
-                        <p>Recomendaciones básicas para atención inmediata y control.</p>
-                    </div>
-                </article>
-            </div>
-        </section>
-
         <!-- Navigation Tabs -->
         <nav class="nav-tabs">
+            <button class="nav-btn active" data-tab="tab-inicio">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/>
+                </svg>
+                <span>Inicio</span>
+            </button>
             <button class="nav-btn" data-tab="tab-chat">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -128,7 +86,7 @@
                 </svg>
                 <span>Objetivos</span>
             </button>
-            <button class="nav-btn active" data-tab="tab-triaje">
+            <button class="nav-btn" data-tab="tab-triaje">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
                 </svg>
@@ -189,6 +147,91 @@
         <!-- Dynamic Content Sections -->
         <main class="main-content">
 
+            <section id="tab-inicio" class="tab-page active portal-home">
+                <div class="portal-grid">
+                    <section class="portal-current" aria-labelledby="portal-current-title">
+                        <div class="portal-section-heading">
+                            <h2 id="portal-current-title">Actual</h2>
+                            <span>Atención para Ecuador</span>
+                        </div>
+                        <article class="portal-feature">
+                            <div class="portal-feature-visual">
+                                <img src="assets/logo-medical-assistant.svg" alt="Robot médico de Gaia Medica">
+                            </div>
+                            <div class="portal-feature-copy">
+                                <p class="portal-kicker">ORIENTACIÓN DE SALUD RURAL</p>
+                                <h3>Atención clara, incluso lejos de un centro de salud</h3>
+                                <p>Encuentra señales de urgencia, primeros auxilios y centros cercanos. La guía orienta; no reemplaza a profesionales de salud ni al ECU 911.</p>
+                                <div class="portal-feature-actions">
+                                    <button class="portal-action-primary" type="button" data-tab="tab-triaje">Abrir triaje</button>
+                                    <button class="portal-action-secondary" type="button" data-tab="tab-chat">Consultar asistente</button>
+                                </div>
+                            </div>
+                        </article>
+                    </section>
+
+                    <section class="portal-topics" aria-labelledby="portal-topics-title">
+                        <div class="portal-section-heading">
+                            <h2 id="portal-topics-title">Temas importantes</h2>
+                        </div>
+                        <button class="portal-topic-link" type="button" data-tab="tab-triaje"><span>Triaje y signos vitales</span><span aria-hidden="true">›</span></button>
+                        <button class="portal-topic-link" type="button" data-tab="tab-near"><span>Centros de salud cercanos</span><span aria-hidden="true">›</span></button>
+                        <button class="portal-topic-link" type="button" data-tab="tab-auxilio"><span>Guías de primeros auxilios</span><span aria-hidden="true">›</span></button>
+                        <button class="portal-topic-link" type="button" data-tab="tab-vitals"><span>Bitácora del paciente</span><span aria-hidden="true">›</span></button>
+                        <button class="portal-topic-link" type="button" data-tab="tab-languages"><span>Atención en Kichwa / Shuar</span><span aria-hidden="true">›</span></button>
+                        <button class="portal-topic-link" type="button" data-tab="tab-directorio"><span>Directorio ECU 911 / MSP</span><span aria-hidden="true">›</span></button>
+                    </section>
+
+                    <aside class="portal-notices" aria-labelledby="portal-notices-title">
+                        <div class="portal-section-heading">
+                            <h2 id="portal-notices-title">Entérate</h2>
+                        </div>
+                        <article class="portal-notice portal-notice-emergency">
+                            <p>Emergencia inmediata</p>
+                            <a href="tel:911" class="portal-emergency-number">911</a>
+                            <span>ECU 911 · atención nacional</span>
+                        </article>
+                        <article class="portal-notice">
+                            <p>Orientación y citas</p>
+                            <a href="tel:171" class="portal-service-number">MSP 171</a>
+                            <span>Ministerio de Salud Pública</span>
+                        </article>
+                        <article class="portal-connectivity">
+                            <span id="connection-status" class="portal-connection-pill">Comprobando conexión...</span>
+                            <p>Las guías principales permanecen disponibles en este dispositivo.</p>
+                        </article>
+                    </aside>
+                </div>
+
+                <details class="professional-dashboard" aria-label="Servicios de salud rápidos" open>
+                    <summary class="dashboard-header">
+                        <div>
+                            <p class="eyebrow">Servicios</p>
+                            <h2>Herramientas médicas esenciales</h2>
+                        </div>
+                        <span class="status-pill">● Modo de atención</span>
+                    </summary>
+                    <div class="feature-grid">
+                        <article class="feature-card feature-red">
+                            <div class="feature-icon">🚑</div>
+                            <div><h3>Triaje rápido</h3><p>Evaluación guiada de signos y prioridad.</p></div>
+                        </article>
+                        <article class="feature-card feature-blue">
+                            <div class="feature-icon">📍</div>
+                            <div><h3>Centros cercanos</h3><p>Hospitales y centros de salud por GPS.</p></div>
+                        </article>
+                        <article class="feature-card feature-green">
+                            <div class="feature-icon">🩺</div>
+                            <div><h3>Primeros auxilios</h3><p>Guías paso a paso para urgencias rurales.</p></div>
+                        </article>
+                        <article class="feature-card feature-gold">
+                            <div class="feature-icon">💊</div>
+                            <div><h3>Botiquín y plantas</h3><p>Información básica para atención inmediata.</p></div>
+                        </article>
+                    </div>
+                </details>
+            </section>
+
             <!-- TAB 0: CHAT IA MÉDICO -->
             <section id="tab-chat" class="tab-page">
                 <div class="card-hero chat-hero">
@@ -199,11 +242,21 @@
                         </div>
                     </div>
 
+                    <div class="chat-provider-info">
+                        <p id="gemini-status" class="chat-provider-status" role="status" aria-live="polite">Comprobando conexión con Gemini...</p>
+                        <p class="chat-privacy-note">Por defecto, tus mensajes reciben una respuesta local. Si activas Gemini, solo se envía la pregunta actual a Google; el historial no se comparte. No incluyas nombres, cédulas, teléfonos ni direcciones.</p>
+                        <label class="gemini-sharing-consent">
+                            <input id="gemini-sharing-consent" type="checkbox">
+                            <span>Permitir enviar mis preguntas a Google Gemini para responder. Puedo desactivarlo cuando quiera.</span>
+                        </label>
+                        <p class="chat-data-retention">El historial y las categorías de consulta se conservan solo durante esta pestaña y se eliminan al cerrarla.</p>
+                    </div>
+
                     <section class="chat-memory" aria-label="Aprendizaje local">
                         <div>
                             <p class="eyebrow">Memoria privada de este dispositivo</p>
                             <p id="chat-memory-summary" aria-live="polite">Aún no hay temas aprendidos.</p>
-                            <small>La memoria registra categorías, no aprende medicina nueva. El historial del chat también se guarda aquí; el botón lo borra junto con el aprendizaje.</small>
+                            <small>La memoria solo registra categorías de consulta; no guarda nombres ni aprende medicina nueva.</small>
                         </div>
                         <button id="btn-clear-chat-memory" class="btn-secondary btn-sm" type="button">Borrar memoria e historial</button>
                     </section>
@@ -263,10 +316,11 @@
                     </div>
 
                     <div id="medical-chat-window" class="medical-chat-window" aria-live="polite"></div>
+                    <p id="chat-response-status" class="chat-response-status" role="status" aria-live="polite"></p>
 
                     <div class="chat-input-row">
-                        <textarea id="medical-chat-input" rows="3" placeholder="Describe el síntoma o la situación del paciente..."></textarea>
-                        <button id="btn-medical-chat-send" class="btn-primary">Enviar</button>
+                        <textarea id="medical-chat-input" rows="3" maxlength="4000" placeholder="Describe el síntoma o la situación del paciente..."></textarea>
+                        <button id="btn-medical-chat-send" class="btn-primary" type="button">Enviar</button>
                     </div>
                 </div>
             </section>
@@ -357,28 +411,31 @@
             <!-- TAB 2: CENTROS DE SALUD CERCANOS A LA UBICACIÓN DEL PACIENTE -->
             <section id="tab-near" class="tab-page">
                 <div class="section-title-box">
-                    <h2>Subcentros de Salud MSP y Puestos Cercanos</h2>
-                    <p>Calcula la distancia exacta en kilómetros desde la ubicación GPS actual del paciente hacia el centro médico ecuatoriano más cercano.</p>
+                    <h2>Clínicas y hospitales cercanos</h2>
+                    <p>Busca centros de salud alrededor de tu ubicación actual y abre una ruta hacia el más cercano.</p>
                 </div>
 
                 <div class="card-hero">
                     <div class="card-header-flex">
                         <div>
-                            <h3>Localizador GPS de Evacuación Médica en Ecuador</h3>
-                            <p class="subtitle">Calcula distancia en Km, rumbo de brújula y estimación de tiempo de viaje (a pie, vehículo o canoa).</p>
+                            <h3>Centros de salud alrededor de ti</h3>
+                            <p class="subtitle">GPS de alta precisión y búsqueda en línea de hospitales, clínicas y centros de salud.</p>
                         </div>
-                        <button id="btn-calc-gps-near" class="btn-primary">
-                            📍 Actualizar mi Ubicación GPS
+                        <button id="btn-calc-gps-near" class="btn-primary" type="button">
+                            📍 Buscar centros cercanos
                         </button>
                     </div>
 
-                    <div id="gps-patient-status-bar" class="gps-status-box" style="margin-bottom:20px;">
-                        <span id="patient-coords-text">Presiona el botón para calcular tu distancia a los Subcentros MSP de Ecuador.</span>
+                    <div id="gps-patient-status-bar" class="gps-status-box" style="margin-bottom:12px;" role="status" aria-live="polite">
+                        <span id="patient-coords-text">Pulsa “Buscar centros cercanos” y permite el GPS para consultar hospitales, clínicas y centros de salud próximos.</span>
                     </div>
 
-                    <div id="nearest-centers-grid" class="contacts-grid">
+                    <p class="location-privacy-note">Al buscar, la ubicación GPS se envía a Overpass/OpenStreetMap para consultar centros próximos. Gaia Medica no la guarda. Los datos del mapa pueden estar incompletos o desactualizados. Si es una emergencia, llama al ECU 911.</p>
+
+                    <div id="nearest-centers-grid" class="contacts-grid" aria-live="polite">
                         <!-- Injected via directory.js -->
                     </div>
+                    <p class="facility-attribution">Datos del mapa: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>.</p>
                 </div>
             </section>
 
@@ -386,24 +443,34 @@
             <section id="tab-auxilio" class="tab-page">
                 <div class="section-title-box">
                     <h2>Guías de Primeros Auxilios de Emergencia</h2>
-                    <p>Instrucciones visuales y habladas offline para salvaguardar vidas en zonas rurales.</p>
+                    <p>Pasos de orientación para responder con seguridad mientras llega ayuda profesional.</p>
                 </div>
+
+                <aside class="firstaid-emergency-note" aria-label="Prioridad ante una emergencia">
+                    <div>
+                        <strong>Primero, seguridad y ayuda.</strong>
+                        <p>Si la persona no responde, no respira normalmente, tiene una hemorragia grave o empeora rápidamente, llama al ECU 911. Sigue las instrucciones del operador.</p>
+                    </div>
+                    <a href="tel:911" class="firstaid-call-button">Llamar al 911</a>
+                </aside>
+                <p class="firstaid-scope-note">Estas guías son orientación general para testigos; no diagnostican ni reemplazan capacitación, indicaciones del ECU 911 o evaluación de un profesional de salud.</p>
 
                 <!-- Category Filters -->
                 <div class="filter-chips">
                     <button class="chip active" data-filter="all">Todos</button>
                     <button class="chip" data-filter="vital">Soporte Vital (RCP)</button>
-                    <button class="chip" data-filter="trauma">Picaduras de Serpientes ECU</button>
+                    <button class="chip" data-filter="trauma">Mordeduras y lesiones</button>
                     <button class="chip" data-filter="parto">Parto Rural</button>
-                    <button class="chip" data-filter="lesion">Hemorragias & Fracturas</button>
+                    <button class="chip" data-filter="lesion">Hemorragias y fracturas</button>
+                    <button class="chip" data-filter="other">Quemaduras y convulsiones</button>
                 </div>
 
                 <!-- Interactive RCP Metronome Component -->
                 <div class="rcp-metronome-card">
                     <div class="metronome-header">
-                        <div class="metronome-badge">⚡ ASISTENTE RCP EN VIVO</div>
-                        <h3>Reanimación Cardiopulmonar (RCP Adulto/Niño)</h3>
-                        <p>Ritmo oficial: <strong>100 - 120 compresiones por minuto</strong>. Sigue los pitidos sonoros.</p>
+                        <div class="metronome-badge">RITMO DE COMPRESIONES</div>
+                        <h3>Metrónomo para RCP en adultos</h3>
+                        <p>Marca <strong>100–120 compresiones por minuto</strong>. La técnica y profundidad cambian según la edad; sigue las instrucciones del ECU 911.</p>
                     </div>
 
                     <div class="metronome-controls">
@@ -438,31 +505,19 @@
                 <div class="snake-id-card">
                     <div class="card-header-flex">
                         <div>
-                            <h3>Guía Visual de Serpientes Venenosas del Ecuador</h3>
-                            <p class="subtitle">Identificación de la Equis (<em>Bothrops asper</em>), Jergón, Verrugosa (<em>Lachesis muta</em>) y Coral (<em>Micrurus</em>).</p>
+                            <h3>Mordedura de serpiente: actúa sin acercarte</h3>
+                            <p class="subtitle">No intentes identificar, capturar ni matar a la serpiente. La identificación visual no confirma si es venenosa.</p>
                         </div>
                         <button id="btn-open-wound-cam" class="btn-secondary">
-                            📸 Tomar Foto Herida/Serpiente
+                            📸 Registrar lesión
                         </button>
                     </div>
 
-                    <div class="snake-compare-grid">
-                        <div class="snake-box danger">
-                            <span class="snake-badge">🐍 VENENOSA: EQUIS / JERGÓN / VERRUGOSA</span>
-                            <ul>
-                                <li><strong>Cabeza:</strong> Triangular muy marcada. Fosa loreal termo-receptora entre ojo y nariz.</li>
-                                <li><strong>Colmillos:</strong> Móviles y huecos con veneno hemotóxico/citotóxico.</li>
-                                <li><strong>Acción inmediata:</strong> Reposo total. Transporte directo a Subcentro MSP para suero antiofídico poliofídico del Ecuador.</li>
-                            </ul>
-                        </div>
-                        <div class="snake-box safe">
-                            <span class="snake-badge-safe">🐍 NO VENENOSA (Falsa Coral / Culebra Verde)</span>
-                            <ul>
-                                <li><strong>Cabeza:</strong> Redonda, continua con el cuello.</li>
-                                <li><strong>Ojos:</strong> Pupilas circulares sin fosa loreal.</li>
-                                <li><strong>Acción inmediata:</strong> Lavar con agua y jabón, desinfectar y vigilar infección.</li>
-                            </ul>
-                        </div>
+                    <div class="snake-safe-steps">
+                        <p><strong>1.</strong> Aléjate de la serpiente y llama al ECU 911. No dejes sola a la persona.</p>
+                        <p><strong>2.</strong> Mantén a la persona quieta y tranquila; retira anillos o ropa apretada de la extremidad afectada.</p>
+                        <p><strong>3.</strong> No cortes, succiones, exprimas ni pongas hielo o torniquetes. No apliques remedios ni retrases el traslado.</p>
+                        <p><strong>4.</strong> Sigue las instrucciones del operador y del personal de salud para traslado inmediato.</p>
                     </div>
                 </div>
 
@@ -475,53 +530,26 @@
             <!-- TAB 4: VADEMÉCUM RURAL & MEDICINA TRADICIONAL ECUATORIANA -->
             <section id="tab-vademecum" class="tab-page">
                 <div class="section-title-box">
-                    <h2>Vademécum & Plantas Medicinales del Ecuador 🇪🇨</h2>
-                    <p>Fármacos de botiquín rural MSP y catálogo de plantas autóctonas (*Guayusa, Horchata Lojana, Sangre de Drago, Escancel, Mña*).</p>
+                    <h2>Medicamentos y plantas medicinales</h2>
+                    <p>Busca nombres, grupos y usos generales. Esta referencia no recomienda tratamientos ni dosis.</p>
                 </div>
 
-                <!-- Search Bar & Calculator -->
+                <!-- Search Bar & Safe-use Information -->
                 <div class="search-dosage-wrapper">
                     <div class="search-box">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"/>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                         </svg>
-                        <input type="text" id="vademecum-search" placeholder="Buscar medicamento o planta ecuatoriana (ej. Paracetamol, Guayusa, Horchata)...">
+                        <input type="search" id="vademecum-search" aria-label="Buscar medicamento o planta medicinal" autocomplete="off" placeholder="Buscar por nombre, uso o grupo (ej. salbutamol, presión, alergia)...">
                     </div>
-                    <button id="btn-open-dosage-calc" class="btn-secondary">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="4" y="2" width="16" height="20" rx="2"/>
-                            <line x1="8" y1="6" x2="16" y2="6"/>
-                            <line x1="16" y1="14" x2="16" y2="18"/>
-                        </svg>
-                        <span>Calculadora Dosis Niños</span>
-                    </button>
                 </div>
 
-                <!-- Dosage Calculator Modal/Card (Hidden initially) -->
-                <div id="dosage-calc-card" class="dosage-card hidden">
-                    <div class="card-header-flex">
-                        <h4>Calculadora Pediatría Rural (Dosis por Peso)</h4>
-                        <button id="btn-close-dosage" class="btn-close">&times;</button>
-                    </div>
-                    <div class="dosage-form">
-                        <div class="form-group">
-                            <label for="child-weight">Peso del Niño (Kg):</label>
-                            <input type="number" id="child-weight" placeholder="Ej. 12" min="3" max="50">
-                        </div>
-                        <div class="form-group">
-                            <label for="med-select">Medicamento Botiquín MSP:</label>
-                            <select id="med-select">
-                                <option value="paracetamol">Paracetamol Jarabe (120mg/5ml)</option>
-                                <option value="ibuprofeno">Ibuprofeno Jarabe (100mg/5ml)</option>
-                                <option value="sro">Sales de Rehidratación Oral (SRO)</option>
-                                <option value="amoxicilina">Amoxicilina Jarabe (250mg/5ml)</option>
-                            </select>
-                        </div>
-                        <button id="btn-calc-dose" class="btn-primary">Calcular Dosis</button>
-                    </div>
-                    <div id="dosage-result" class="dosage-result-box hidden"></div>
-                </div>
+                <details class="med-safety-note">
+                    <summary>Antes de usar un medicamento</summary>
+                    <p>La dosis depende del producto, concentración, edad, peso, embarazo, enfermedades y otros fármacos. Sigue la receta y el envase; consulta al personal de salud o al MSP 171. No compartas antibióticos ni cambies un tratamiento por esta ficha.</p>
+                    <p>Si hay dificultad para respirar, hinchazón de lengua o garganta, pérdida del conocimiento o dolor fuerte en el pecho, llama al ECU 911.</p>
+                </details>
 
                 <!-- Tabs for Medicines vs Herbal Support -->
                 <div class="subtabs-bar">
@@ -540,6 +568,7 @@
                 <div class="section-title-box">
                     <h2>Bitácora de Control de Signos Vitales</h2>
                     <p>Registra la evolución del paciente para entregar a los paramédicos del ECU 911 o al Subcentro de Salud.</p>
+                    <p class="local-data-warning">Los registros se guardan en este navegador sin cifrado. Usa un dispositivo personal y borra el historial al terminar.</p>
                 </div>
 
                 <div class="vitals-layout">
@@ -609,19 +638,30 @@
                     <p>Completa los datos que quieras compartir con el personal de salud. Se guardan solo en este dispositivo; esta prueba no envía datos ni genera un QR escaneable.</p>
                 </div>
 
+                <aside class="local-privacy-panel">
+                    <div>
+                        <h3>Privacidad en este dispositivo</h3>
+                        <p>Ficha y bitácora se guardan en el navegador sin cifrado. Evita guardar la cédula o datos que no sean necesarios, especialmente en dispositivos compartidos.</p>
+                    </div>
+                    <div>
+                        <button id="btn-clear-local-health-data" class="btn-secondary" type="button">Borrar todos los datos locales de salud</button>
+                        <p id="local-health-data-status" role="status" aria-live="polite"></p>
+                    </div>
+                </aside>
+
                 <div class="profile-layout">
                     <!-- Profile Form -->
                     <div class="profile-card">
                         <h3>Información importante para emergencias</h3>
-                        <form id="profile-form">
+                        <form id="profile-form" autocomplete="off">
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label for="prof-fullname">Nombre Completo:</label>
-                                    <input type="text" id="prof-fullname" placeholder="Nombres y Apellidos">
+                                    <label for="prof-fullname">Nombre completo (opcional):</label>
+                                    <input type="text" id="prof-fullname" autocomplete="off" placeholder="Solo si es necesario">
                                 </div>
                                 <div class="form-group">
-                                    <label for="prof-dni">Cédula de Identidad Ecuatoriana / Pasaporte:</label>
-                                    <input type="text" id="prof-dni" placeholder="Ej. 1712345678">
+                                    <label for="prof-dni">Cédula / pasaporte (opcional):</label>
+                                    <input type="text" id="prof-dni" autocomplete="off" placeholder="Evita guardarlo si no es necesario">
                                 </div>
                                 <div class="form-group">
                                     <label for="prof-blood">Grupo Sanguíneo:</label>
@@ -786,7 +826,7 @@
         <div id="camera-modal" class="modal-overlay hidden">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>Captura de Foto para Diagnóstico Médico</h3>
+                    <h3>Registro visual de lesión</h3>
                     <button id="btn-close-camera" class="btn-close">&times;</button>
                 </div>
                 <div class="modal-body">
