@@ -1,5 +1,5 @@
 /**
- * MediRural AI - SOS Emergency Broadcast & Satellite Geolocation Engine
+ * MediRural AI - SOS Emergency Broadcast & Device Geolocation
  * Formats low-bandwidth text payloads for SMS, WhatsApp, and VHF emergency channels.
  */
 
@@ -10,6 +10,8 @@
         const btnMainSOS = document.getElementById('btn-main-sos');
         const modal = document.getElementById('sos-modal');
         const btnClose = document.getElementById('btn-close-sos');
+        const btnRefreshLocation = document.getElementById('btn-refresh-sos-location');
+        const btnCopyLocation = document.getElementById('btn-copy-sos-location');
 
         if (!btnMainSOS || !modal) return;
 
@@ -21,6 +23,14 @@
             btnClose.addEventListener('click', () => {
                 modal.classList.add('hidden');
             });
+        }
+
+        if (btnRefreshLocation) {
+            btnRefreshLocation.addEventListener('click', fetchLocationAndBuildPayload);
+        }
+
+        if (btnCopyLocation) {
+            btnCopyLocation.addEventListener('click', copyCoordinates);
         }
 
         setupChannelButtons();
@@ -35,45 +45,101 @@
     function fetchLocationAndBuildPayload() {
         const gpsBox = document.getElementById('gps-status-box');
         const gpsText = document.getElementById('gps-status-text');
-        const textarea = document.getElementById('sos-text-payload');
+        const refreshButton = document.getElementById('btn-refresh-sos-location');
+        const copyButton = document.getElementById('btn-copy-sos-location');
+        const feedback = document.getElementById('gps-copy-feedback');
+        const spinner = gpsBox.querySelector('.spinner');
 
+        currentCoords = null;
+        buildPayload(null);
+        if (feedback) feedback.textContent = '';
+        if (copyButton) copyButton.disabled = true;
+        if (refreshButton) refreshButton.disabled = true;
+        if (spinner) spinner.classList.remove('hidden');
         gpsBox.style.borderColor = 'var(--color-warning)';
-        gpsText.textContent = "Obteniendo Coordenadas GPS Satelitales en tiempo real...";
+        gpsText.textContent = 'Solicitando una ubicación actualizada al dispositivo…';
 
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
-                    const lat = pos.coords.latitude.toFixed(5);
-                    const lon = pos.coords.longitude.toFixed(5);
-                    const acc = Math.round(pos.coords.accuracy);
-                    currentCoords = { lat, lon };
+                    const { latitude, longitude, accuracy } = pos.coords;
+                    currentCoords = {
+                        lat: latitude.toFixed(5),
+                        lon: longitude.toFixed(5),
+                        accuracy,
+                        timestamp: pos.timestamp
+                    };
 
                     gpsBox.style.borderColor = 'var(--color-success)';
-                    gpsText.innerHTML = `✅ GPS Conectado: <strong>${lat}, ${lon}</strong> (Precisión ~${acc}m)`;
-                    buildPayload(lat, lon);
+                    gpsText.textContent = `Ubicación recibida: ${currentCoords.lat}, ${currentCoords.lon} · precisión reportada ±${Math.round(accuracy)} m · ${formatCaptureTime(pos.timestamp)}.`;
+                    buildPayload(currentCoords);
+                    if (copyButton) copyButton.disabled = false;
+                    finishLocationRequest(refreshButton, spinner);
                 },
                 (err) => {
                     console.warn("GPS Error", err);
+                    currentCoords = null;
                     gpsBox.style.borderColor = 'var(--color-danger)';
-                    gpsText.textContent = "⚠️ No se pudo obtener GPS automáticamente. Usando plantilla sin coordenadas.";
-                    buildPayload(null, null);
+                    gpsText.textContent = locationErrorMessage(err);
+                    buildPayload(null);
+                    finishLocationRequest(refreshButton, spinner);
                 },
-                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
             );
         } else {
             gpsBox.style.borderColor = 'var(--color-danger)';
-            gpsText.textContent = "⚠️ Dispositivo no soporta Geolocalización GPS.";
+            gpsText.textContent = 'La geolocalización no está disponible en este navegador o contexto. Usa una conexión segura (HTTPS) y revisa los permisos; el mensaje se puede enviar sin coordenadas.';
             buildPayload(null, null);
+            finishLocationRequest(refreshButton, spinner);
         }
     }
 
-    function buildPayload(lat, lon) {
+    function finishLocationRequest(button, spinner) {
+        if (button) button.disabled = false;
+        if (spinner) spinner.classList.add('hidden');
+    }
+
+    function formatCaptureTime(timestamp) {
+        return new Intl.DateTimeFormat('es-EC', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        }).format(new Date(timestamp));
+    }
+
+    function locationErrorMessage(error) {
+        if (error.code === error.PERMISSION_DENIED) {
+            return 'No se concedió el permiso de ubicación. Revisa el permiso del navegador y que la página use una conexión segura; el mensaje se preparó sin coordenadas.';
+        }
+        if (error.code === error.TIMEOUT) {
+            return 'La ubicación tardó demasiado y no se recibió una posición. Activa la ubicación y vuelve a intentar; el mensaje está sin coordenadas.';
+        }
+        if (error.code === error.POSITION_UNAVAILABLE) {
+            return 'El dispositivo no pudo determinar una ubicación. Comprueba sus ajustes de ubicación y vuelve a intentar; el mensaje está sin coordenadas.';
+        }
+        return 'No se pudo obtener la ubicación. El mensaje se preparó sin coordenadas; puedes volver a intentarlo.';
+    }
+
+    async function copyCoordinates() {
+        const feedback = document.getElementById('gps-copy-feedback');
+        if (!currentCoords) return;
+
+        try {
+            if (!navigator.clipboard || !navigator.clipboard.writeText) throw new Error('clipboard unavailable');
+            await navigator.clipboard.writeText(`${currentCoords.lat}, ${currentCoords.lon}`);
+            if (feedback) feedback.textContent = 'Coordenadas copiadas. Precisión reportada por el dispositivo: ±' + Math.round(currentCoords.accuracy) + ' m.';
+        } catch (error) {
+            if (feedback) feedback.textContent = 'No se pudieron copiar automáticamente. Puedes seleccionar las coordenadas en el mensaje SOS.';
+        }
+    }
+
+    function buildPayload(location) {
         const textarea = document.getElementById('sos-text-payload');
         const profile = (window.MediRuralProfile) ? window.MediRuralProfile.getStoredProfile() : null;
 
-        let locStr = (lat && lon) 
-            ? `Lat: ${lat}, Lon: ${lon} (https://maps.google.com/?q=${lat},${lon})` 
-            : `Ubicación: Sector Rural s/n`;
+        const locStr = location
+            ? `Lat: ${location.lat}, Lon: ${location.lon} (precisión reportada ±${Math.round(location.accuracy)} m; https://maps.google.com/?q=${location.lat},${location.lon})`
+            : 'Ubicación: no disponible (sin coordenadas)';
 
         let nameStr = profile ? `${profile.name} (DNI: ${profile.dni || 'S/I'}, Sangre: ${profile.blood || 'S/I'})` : `Paciente sin registrar`;
         let allergyStr = profile && profile.allergies ? ` | Alergia: ${profile.allergies}` : '';

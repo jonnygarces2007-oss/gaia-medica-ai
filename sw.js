@@ -3,7 +3,7 @@
  * Caches all emergency assets locally for instant loading without mobile signal.
  */
 
-const CACHE_NAME = 'medirural-v1.3.5';
+const CACHE_NAME = 'medirural-v1.3.6';
 const ASSETS = [
     './',
     './index.html',

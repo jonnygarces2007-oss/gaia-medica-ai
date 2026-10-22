@@ -2449,6 +2449,29 @@ html, body {
     margin-bottom: 16px;
 }
 
+.sos-location-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: -4px 0 8px;
+}
+
+.sos-location-actions button {
+    flex: 1 1 150px;
+}
+
+.sos-location-actions button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.sos-location-feedback {
+    min-height: 1.2em;
+    margin: 0 0 12px;
+    color: var(--text-muted);
+    font-size: 0.84rem;
+}
+
 .spinner {
     width: 20px;
     height: 20px;

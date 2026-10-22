@@ -55,7 +55,7 @@
                     <div class="pulse-indicator"></div>
                     <div>
                         <strong class="sos-title">🚨 ¿EMERGENCIA MÉDICA EN ECUADOR?</strong>
-                        <p class="sos-desc">Genera alerta inmediata con GPS satelital para ECU 911 y Subcentros MSP sin datos móviles</p>
+                        <p class="sos-desc">Prepara una alerta con la ubicación disponible en el dispositivo para compartir por los canales configurados.</p>
                     </div>
                 </div>
                 <button id="btn-main-sos" class="btn-sos-pulse" type="button" title="Abrir alerta de emergencia" aria-label="Abrir alerta de emergencia ECU 911">
@@ -412,14 +412,14 @@
             <section id="tab-near" class="tab-page">
                 <div class="section-title-box">
                     <h2>Clínicas y hospitales cercanos</h2>
-                    <p>Busca centros de salud alrededor de tu ubicación actual y abre una ruta hacia el más cercano.</p>
+                    <p>Busca centros de salud alrededor de tu ubicación actual y abre una ruta hacia el de menor distancia calculada.</p>
                 </div>
 
                 <div class="card-hero">
                     <div class="card-header-flex">
                         <div>
                             <h3>Centros de salud alrededor de ti</h3>
-                            <p class="subtitle">GPS de alta precisión y búsqueda en línea de hospitales, clínicas y centros de salud.</p>
+                            <p class="subtitle">Ubicación del dispositivo (se solicita alta precisión) y búsqueda en línea de hospitales, clínicas y centros de salud.</p>
                         </div>
                         <button id="btn-calc-gps-near" class="btn-primary" type="button">
                             📍 Buscar centros cercanos
@@ -776,10 +776,15 @@
                     <button id="btn-close-sos" class="btn-close">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="gps-status-box" id="gps-status-box">
-                        <div class="spinner"></div>
-                        <span id="gps-status-text">Obteniendo Coordenadas GPS satelitales en Ecuador...</span>
+                    <div class="gps-status-box" id="gps-status-box" role="status" aria-live="polite" aria-atomic="true">
+                        <div class="spinner" aria-hidden="true"></div>
+                        <span id="gps-status-text">Solicitando una ubicación actualizada al dispositivo…</span>
                     </div>
+                    <div class="sos-location-actions">
+                        <button id="btn-refresh-sos-location" class="btn-secondary" type="button">Actualizar ubicación</button>
+                        <button id="btn-copy-sos-location" class="btn-secondary" type="button" disabled>Copiar coordenadas</button>
+                    </div>
+                    <p id="gps-copy-feedback" class="sos-location-feedback" role="status" aria-live="polite"></p>
 
                     <div class="sos-payload-preview">
                         <label>Mensaje SOS Automatizado ECU 911 (Listo para enviar):</label>

@@ -161,13 +161,13 @@
 
         btnCalc.addEventListener('click', () => {
             if (!('geolocation' in navigator)) {
-                statusText.textContent = 'Este dispositivo no ofrece geolocalización. Busca el centro en el mapa manualmente.';
+                statusText.textContent = 'La geolocalización no está disponible en este navegador o contexto. Usa una conexión segura (HTTPS); también puedes buscar el centro en el mapa manualmente.';
                 return;
             }
 
             btnCalc.disabled = true;
             btnCalc.textContent = 'Obteniendo ubicación...';
-            statusText.textContent = 'Solicitando una ubicación GPS precisa...';
+            statusText.textContent = 'Solicitando al dispositivo una ubicación actualizada con alta precisión...';
             grid.innerHTML = '<p class="gps-empty-state">Esperando permiso y señal de ubicación...</p>';
 
             navigator.geolocation.getCurrentPosition(async (position) => {
@@ -176,8 +176,13 @@
                     lon: position.coords.longitude
                 };
                 const accuracy = Math.round(position.coords.accuracy);
+                const capturedAt = new Intl.DateTimeFormat('es-EC', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                }).format(new Date(position.timestamp));
 
-                statusText.textContent = `Ubicación recibida con precisión aproximada de ±${accuracy} m. Buscando centros de salud cercanos en OpenStreetMap...`;
+                statusText.textContent = `Ubicación recibida a las ${capturedAt}; precisión reportada por el dispositivo: ±${accuracy} m. Buscando centros de salud cercanos en OpenStreetMap...`;
 
                 try {
                     if (!navigator.onLine) throw new Error('offline');
@@ -189,7 +194,7 @@
                         return;
                     }
 
-                    statusText.textContent = `Encontramos ${facilities.length} centros (precisión GPS aprox. ±${accuracy} m). El primero es el más cercano por distancia en línea recta; la ruta puede ser más larga.`;
+                    statusText.textContent = `Encontramos ${facilities.length} centros. Ubicación: precisión reportada ±${accuracy} m a las ${capturedAt}. El orden/distancia en línea recta es aproximado; la ruta puede ser más larga y el mapa puede estar incompleto o desactualizado.`;
                     renderFacilityResults(facilities, userLocation, grid);
                 } catch (error) {
                     statusText.textContent = 'No se pudo consultar OpenStreetMap. Se muestran únicamente contactos locales de respaldo, que pueden no ser los más cercanos.';
@@ -200,11 +205,11 @@
                 }
             }, (error) => {
                 if (error.code === error.PERMISSION_DENIED) {
-                    statusText.textContent = 'Permite el acceso a la ubicación para buscar centros cercanos. Si es una emergencia, llama al ECU 911.';
+                    statusText.textContent = 'No se concedió el permiso de ubicación. Revisa el permiso del navegador y que la página use una conexión segura. Si es una emergencia, llama al ECU 911.';
                 } else if (error.code === error.TIMEOUT) {
-                    statusText.textContent = 'La ubicación tardó demasiado. Activa el GPS y vuelve a intentarlo.';
+                    statusText.textContent = 'La ubicación tardó demasiado y no se recibió una posición. Activa la ubicación del dispositivo y vuelve a intentarlo.';
                 } else {
-                    statusText.textContent = 'No se pudo obtener una ubicación precisa. Comprueba el GPS y vuelve a intentarlo.';
+                    statusText.textContent = 'El dispositivo no pudo determinar la ubicación. Comprueba sus ajustes de ubicación y vuelve a intentarlo.';
                 }
                 grid.innerHTML = '<p class="gps-empty-state">Aún no hay resultados. Vuelve a intentar cuando la ubicación esté disponible.</p>';
                 btnCalc.disabled = false;
@@ -300,7 +305,7 @@
                     <div>
                         <div class="facility-meta">
                             <span class="contact-role-badge">${escapeHtml(facility.role)}</span>
-                            <span class="facility-distance">${index === 0 ? 'Más cercano · ' : ''}${distance} km</span>
+                            <span class="facility-distance">${index === 0 ? 'Menor distancia calculada · ' : ''}${distance} km</span>
                         </div>
                         <h3>${escapeHtml(facility.name)}</h3>
                         <p class="facility-location">${escapeHtml(facility.provincia || 'Ubicación aproximada')} · ${distance} km en línea recta</p>
